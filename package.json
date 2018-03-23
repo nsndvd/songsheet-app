@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "Standalone cross platform app for songsheet",
   "main": "index.js",
+  "scripts": {
+    "start": "electron ./app/",
+    "test": "nsp check"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jannessm/songsheet-app.git"
