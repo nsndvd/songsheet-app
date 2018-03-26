@@ -1,8 +1,13 @@
 
-  <div id="browser_content" class="content">
-      <h3>{{ headline }}<div class="add">+</div></h3>
-      <div id="songs">
-          <input id="search" [placeholder]="search_text" oninput="search(this)">
-          <app-song *ngFor="let song of songs" [song]="song" class="prev_box"></app-song>
-      </div>
-  </div>
+<div id="browser_content" class="content" [ngSwitch]="type">
+    <h3>{{ headline }}<div class="add">+</div></h3>
+    <div id="songs">
+        <input id="search" [placeholder]="search_text" oninput="search(this)">
+        <span *ngSwitchCase="'songs'">
+            <app-song *ngFor="let song of songs" [song]="song" class="prev_box"></app-song>
+        </span>
+        <span *ngSwitchCase="'events'">
+            <app-event *ngFor="let event of events" [event]="event" class="prev_box"></app-event>
+        </span>
+    </div>
+</div>

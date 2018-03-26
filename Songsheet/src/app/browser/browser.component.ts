@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-browser',
   templateUrl: './browser.component.html',
-  styleUrls: ['./browser.component.scss']
+  styleUrls: ['./browser.component.scss', '../global_styles.scss']
 })
 export class BrowserComponent implements OnInit {
 
@@ -35,6 +35,7 @@ export class BrowserComponent implements OnInit {
       created: new Date()
     }
   ];
+  events: Event[] = [];
 
   constructor(private route: ActivatedRoute) {
   }

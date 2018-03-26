@@ -1,0 +1,20 @@
+
+input:focus{
+    outline: none;
+    box-shadow: none;
+    border: none;
+}
+
+.prev_box{
+    position: relative;
+    background: lightblue;
+    padding: 90px 20px 20px 20px;
+    margin: 20px;
+    width: calc(25% - 40px);
+    height: 250px;
+    box-sizing: border-box;
+    display: inline-block;
+}
+.prev_box:hover{
+    background: darkorange;
+}
