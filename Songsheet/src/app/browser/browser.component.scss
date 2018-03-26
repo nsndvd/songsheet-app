@@ -1,0 +1,27 @@
+
+.content{
+    padding-top: 100px;
+    width: 80%;
+    margin: 0 auto;
+}
+
+#search{
+    background: transparent;
+    color: black;
+    border: none;
+    border-bottom: 1px solid black;
+    width: calc(100% - 80px);
+    padding: 10px;
+    font-size: 1em;
+    margin: 30px;
+}
+
+.add{
+    display: inline-block;
+    margin: 10px;
+    width: 20px;
+    height: 20px;
+    background: darkgrey;
+    text-align: center;
+    border-radius: 5px;
+}

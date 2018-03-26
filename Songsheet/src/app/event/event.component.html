@@ -1,0 +1,14 @@
+<div class="prev_box">
+<a href="event.link" class="event_title">{{ event.name }}</a>
+<div class="event_preview">{{ event.description }}</div>
+<table class="event_attr">
+    <tr>
+        <th>Songs</th>
+        <td>
+            <ul>
+                <li *ngFor="let song of event.songs">{{ song }}</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+</div>

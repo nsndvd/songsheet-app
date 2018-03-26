@@ -1,0 +1,22 @@
+<div class="prev_box">
+    <a href="{{song.link}}" class="song_title">{{ song.name }}<br>
+        <span class="song_artist">{{ song.artist }}</span>
+    </a>
+    <div class="song_preview">{{ song.preview }}</div>
+    <table class="song_attr">
+        <tr>
+            <th>BPM</th>
+            <td>
+                {{ song.bpm }}
+            </td>
+        </tr>
+        <tr>
+            <th>Books</th>
+            <td>
+                <ul>
+                    <li *ngFor="let book of song.books">{{ book }}</li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+</div>
