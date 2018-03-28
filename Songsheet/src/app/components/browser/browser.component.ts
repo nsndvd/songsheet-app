@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { Song } from '../../../ts/song';
+
 @Component({
   selector: 'app-browser',
   templateUrl: './browser.component.html',
@@ -8,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class BrowserComponent implements OnInit {
 
-  type: string;
+  private type: string;
   headline: string;
   search_text: string;
   
@@ -56,18 +58,4 @@ export class BrowserComponent implements OnInit {
     });
   }
 
-}
-
-class Song {
-  id: string;
-  name: string;
-  artist: string;
-  bpm: number;
-  books: string[];
-  path: string;
-  link: string;
-  preview: string;
-  obj: any;
-  last_modified: Date;
-  created: Date;
 }

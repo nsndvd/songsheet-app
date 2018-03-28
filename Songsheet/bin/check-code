@@ -6,7 +6,7 @@ var eslint = require('eslint');
 var path = require('path');
 var fs = require('fs');
 
-var config = require('../config/eslintrc.js');
+var config = require('./eslintrc');
 var engine = new eslint.CLIEngine(config);
 var report = engine.executeOnFiles([
   '**/*.js',

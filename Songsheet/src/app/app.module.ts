@@ -4,13 +4,14 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
-import { BrowserComponent } from './browser/browser.component';
-import { SettingsComponent } from './settings/settings.component';
-import { EditorComponent } from './editor/editor.component';
-import { NavComponent } from './nav/nav.component';
-import { SongComponent } from './song/song.component';
-import { EventComponent } from './event/event.component';
+import { BrowserComponent } from './components/browser/browser.component';
+import { SettingsComponent } from './components/settings/settings.component';
+import { EditorComponent } from './components/editor/editor.component';
+import { NavComponent } from './components/nav/nav.component';
+import { SongComponent } from './components/song/song.component';
+import { EventComponent } from './components/event/event.component';
 
+import { DataService } from './services/data/data.service';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,9 @@ import { EventComponent } from './event/event.component';
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [
+    DataService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

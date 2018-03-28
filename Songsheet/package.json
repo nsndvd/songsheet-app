@@ -10,7 +10,9 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build-electron": "ng build --base-href . && cp src/electron/* dist/",
-    "electron": "yarn run build-electron && ./node_modules/.bin/electron dist/"
+    "electron": "yarn run build-electron && ./node_modules/.bin/electron dist/",
+    "check-dependencies": "node bin/check-dependencies",
+    "check-code": "node bin/check-code"
   },
   "private": true,
   "dependencies": {
@@ -24,6 +26,7 @@
     "@angular/platform-browser-dynamic": "^5.2.0",
     "@angular/router": "^5.2.0",
     "core-js": "^2.4.1",
+    "idb": "^2.1.1",
     "rxjs": "^5.5.6",
     "zone.js": "^0.8.19"
   },
