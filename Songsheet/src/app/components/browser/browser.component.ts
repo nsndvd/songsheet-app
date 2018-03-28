@@ -6,7 +6,7 @@ import { Song } from '../../../ts/song';
 @Component({
   selector: 'app-browser',
   templateUrl: './browser.component.html',
-  styleUrls: ['./browser.component.scss', '../global_styles.scss']
+  styleUrls: ['./browser.component.scss']
 })
 export class BrowserComponent implements OnInit {
 

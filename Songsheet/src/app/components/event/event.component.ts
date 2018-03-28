@@ -4,7 +4,7 @@ import { Songgroup } from '../../../ts/songgroup';
 @Component({
   selector: 'app-event',
   templateUrl: './event.component.html',
-  styleUrls: ['./event.component.scss', '../global_styles.scss']
+  styleUrls: ['./event.component.scss']
 })
 export class EventComponent implements OnInit {
 

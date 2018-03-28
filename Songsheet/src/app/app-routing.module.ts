@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import {BrowserComponent} from './browser/browser.component';
-import {EditorComponent} from './editor/editor.component';
-import {SettingsComponent} from './settings/settings.component';
+import {BrowserComponent} from './components/browser/browser.component';
+import {EditorComponent} from './components/editor/editor.component';
+import {SettingsComponent} from './components/settings/settings.component';
 
 const routes: Routes = [
   {
