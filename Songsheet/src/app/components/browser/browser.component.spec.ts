@@ -1,6 +1,11 @@
+import { AppRoutingModule } from '../../app-routing.module';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BrowserComponent } from './browser.component';
+import { SongComponent } from '../song/song.component';
+import { EventComponent } from '../event/event.component';
+import { EditorComponent } from '../editor/editor.component';
+import { SettingsComponent } from '../settings/settings.component';
 
 describe('BrowserComponent', () => {
   let component: BrowserComponent;
@@ -8,7 +13,16 @@ describe('BrowserComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BrowserComponent ]
+      declarations: [ 
+        BrowserComponent,
+        SongComponent,
+        EventComponent,
+        EditorComponent,
+        SettingsComponent
+      ],
+      imports: [
+        AppRoutingModule
+      ]
     })
     .compileComponents();
   }));

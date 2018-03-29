@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Song } from '../../../ts/song';
+import { DATABASES, BROWSERTYPES } from '../../../ts/databases';
+import { Songgroup } from '../../../ts/songgroup';
+
+let moment = require('moment');
 
 @Component({
   selector: 'app-browser',
@@ -10,9 +14,10 @@ import { Song } from '../../../ts/song';
 })
 export class BrowserComponent implements OnInit {
 
-  private type: string;
+  type: string;
   headline: string;
   search_text: string;
+  displayAddForm: boolean = false;
   
   song_view: object = {
     headline: 'Your Songs',
@@ -22,30 +27,16 @@ export class BrowserComponent implements OnInit {
     headline: 'Your Events',
     search_text: 'Search an event'
   }
-  songs: Song[] = [
-    {
-      id: '1234',
-      name: 'God of Wonders',
-      artist: 'Künstler',
-      bpm: 100,
-      books: [],
-      path: '',
-      link: '',
-      preview: 'haaaalooooo',
-      obj: {},
-      last_modified: new Date(),
-      created: new Date()
-    }
-  ];
-  events: Event[] = [];
+  songs: Song[] = [];
+  events: Songgroup[] = [];
 
-  constructor(private route: ActivatedRoute) {
-  }
+  songscounter: number[] = [1];
+
+  constructor(private route: ActivatedRoute) { }
   
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.type = params['type'];
-      console.log(this.type);
       switch(this.type){
         default:
         case 'songs':
@@ -56,6 +47,50 @@ export class BrowserComponent implements OnInit {
           break;
       }
     });
+  }
+
+  toggleAddForm(){
+    this.displayAddForm = !this.displayAddForm;
+  }
+
+  changeDateFormat(that){
+    let val;
+    switch(that.type){
+      case 'date':
+        val = moment(that.value);
+        that.type = 'text';
+        that.value = !val.isValid() ? '' : val.locale('de').format('L');
+        break;
+      case 'text':
+        val = moment(that.value, 'DD.MM.YYYY');
+        that.type = 'date';
+        that.value = !val.isValid() ? '' : val.format('YYYY-MM-DD');
+        break;
+    }
+  }
+
+  submitSong(e){
+    e.preventDefault();
+  }
+
+  submitEvent(e){
+    e.preventDefault();
+  }
+
+  addSongField(e){
+    e.preventDefault();
+    this.songscounter.push(this.songscounter.length + 1);
+  }
+
+  removeSongField(e){
+    e.preventDefault();
+    if(this.songscounter.length > 1){
+      this.songscounter.pop();
+    }
+  }
+
+  addEntry(type: BROWSERTYPES, obj: [Song, Songgroup]){
+
   }
 
 }

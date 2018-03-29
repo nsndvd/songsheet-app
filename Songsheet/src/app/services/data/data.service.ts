@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
+import uuid from 'uuid/v1';
 
 import idb, { DB } from '../../../../node_modules/idb';
+import { DATABASES } from '../../../ts/databases';
 
 @Injectable()
 export class DataService {
@@ -8,7 +10,7 @@ export class DataService {
   private dbPromise: Promise<DB>;
 
   constructor() { 
-    const dbPromise = idb.open('songsheet', 1, (upgradeDb) => {
+    this.dbPromise = idb.open('songsheet', 1, (upgradeDb) => {
       if (!upgradeDb.objectStoreNames.contains('settings')) {
         upgradeDb.createObjectStore('settings', {keyPath: 'setting'});
       }
@@ -21,7 +23,15 @@ export class DataService {
     });
   }
 
-  upsert(database: string, key: string, data: object){
+  public upsert(database: DATABASES, key: string, data: any){
+    if(typeof data !== 'object'){
+      throw new Error('data is not an object. Only objects can be added to Indexeddb');
+    }
+    // settings has a different id property
+    if(!data.id && database !== DATABASES.settings){
+      data.id = uuid();
+    }
+
     return this.getByKey(database, key).then( obj => {
       return this.dbPromise.then(db => {
         let tx = db.transaction(database, 'readwrite');
@@ -39,19 +49,21 @@ export class DataService {
     });
   }
 
-  getAll(database: string){
+  getAll(database: DATABASES){
     return this.dbPromise.then(db => {
+      console.log(db);
       return db.transaction(database, 'readonly').objectStore(database).getAll();
     })
   }
 
-  getByKey(database: string, key: string){
+  getByKey(database: DATABASES, key: string){
     return this.dbPromise.then(db => {
+      console.log(db);
       return db.transaction(database, 'readonly').objectStore(database).get(key);
     })
   }
 
-  delete(database: string, key: string){
+  delete(database: DATABASES, key: string){
     return this.dbPromise.then(db => {
       let tx = db.transaction(database, 'readwrite');
       tx.objectStore(database).delete(key);

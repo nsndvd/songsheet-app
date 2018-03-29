@@ -28,6 +28,7 @@
     "core-js": "^2.4.1",
     "idb": "^2.1.1",
     "rxjs": "^5.5.6",
+    "uuid": "^3.2.1",
     "zone.js": "^0.8.19"
   },
   "devDependencies": {

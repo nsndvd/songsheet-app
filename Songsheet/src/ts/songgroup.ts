@@ -1,10 +1,13 @@
 import { Song } from './song';
 
 export class Songgroup {
-    id: string;
+    id?: string;
     name: string;
-    description: string;
-    link: string;
-    date: Date;
+    description?: string;
+    date?: Date;
     songs: Song[];
+
+    link(): string{
+        return '';
+    }
 }

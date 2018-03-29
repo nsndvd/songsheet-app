@@ -1,13 +1,22 @@
 export class Song {
-    id: string;
+    id?: string;
     name: string;
-    artist: string;
-    bpm: number;
-    books: string[];
+    artist?: string;
+    bpm?: number;
+    books?: string[];
     path: string;
-    link: string;
-    preview: string;
     obj: any;
-    last_modified: Date;
-    created: Date;
+    private preview: string;
+
+    link(): string{
+        return ''
+    }
+
+    getPreview(): string{
+        return this.preview;
+    }
+
+    setPreview(prev: string){
+        this.preview = prev;
+    }
 }
