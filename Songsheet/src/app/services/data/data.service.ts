@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import uuid from 'uuid/v1';
+let uuid = require('uuid/v1');
 
-import idb, { DB } from '../../../../node_modules/idb';
+import idb, { DB } from 'idb';
 import { DATABASES } from '../../../ts/databases';
+import { Song } from '../../../ts/song';
+import { Songgroup } from '../../../ts/songgroup';
 
 @Injectable()
 export class DataService {
@@ -12,7 +14,7 @@ export class DataService {
   constructor() { 
     this.dbPromise = idb.open('songsheet', 1, (upgradeDb) => {
       if (!upgradeDb.objectStoreNames.contains('settings')) {
-        upgradeDb.createObjectStore('settings', {keyPath: 'setting'});
+        upgradeDb.createObjectStore('settings', {keyPath: 'id'});
       }
       if (!upgradeDb.objectStoreNames.contains('songs')) {
         upgradeDb.createObjectStore('songs', {keyPath: 'id', autoIncrement: true});
@@ -23,7 +25,7 @@ export class DataService {
     });
   }
 
-  public upsert(database: DATABASES, key: string, data: any){
+  public upsert(database: DATABASES, data: any){
     if(typeof data !== 'object'){
       throw new Error('data is not an object. Only objects can be added to Indexeddb');
     }
@@ -32,7 +34,7 @@ export class DataService {
       data.id = uuid();
     }
 
-    return this.getByKey(database, key).then( obj => {
+    return this.getByKey(database, data.id).then( obj => {
       return this.dbPromise.then(db => {
         let tx = db.transaction(database, 'readwrite');
         let store = tx.objectStore(database);
@@ -51,14 +53,28 @@ export class DataService {
 
   getAll(database: DATABASES){
     return this.dbPromise.then(db => {
-      console.log(db);
-      return db.transaction(database, 'readonly').objectStore(database).getAll();
+      return db.transaction(database, 'readonly').objectStore(database).getAll().then( res => {
+        let arr = [];
+        for (let elem of res){
+          switch(database){
+            case DATABASES.songs:
+              arr.push(new Song(elem));
+              break;
+            case DATABASES.events:
+              arr.push(new Songgroup(elem));
+              break;
+            default:
+              arr.push(elem);
+          }
+        }
+
+        return arr;
+      });
     })
   }
 
   getByKey(database: DATABASES, key: string){
     return this.dbPromise.then(db => {
-      console.log(db);
       return db.transaction(database, 'readonly').objectStore(database).get(key);
     })
   }

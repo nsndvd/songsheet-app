@@ -10,6 +10,7 @@ import { EditorComponent } from './components/editor/editor.component';
 import { NavComponent } from './components/nav/nav.component';
 import { SongComponent } from './components/song/song.component';
 import { EventComponent } from './components/event/event.component';
+import { SongEventFormComponent } from './components/song-event-form/song-event-form.component';
 
 import { DataService } from './services/data/data.service';
 
@@ -21,7 +22,8 @@ import { DataService } from './services/data/data.service';
     EditorComponent,
     NavComponent,
     SongComponent,
-    EventComponent
+    EventComponent,
+    SongEventFormComponent
   ],
   imports: [
     BrowserModule,

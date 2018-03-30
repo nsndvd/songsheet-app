@@ -1,12 +1,17 @@
-<a href="{{song.link}}" class="song_title">{{ song.name }}<br>
+<div class="song_title">{{ song.name }}<br>
     <span class="song_artist">{{ song.artist }}</span>
-</a>
-<div class="song_preview">{{ song.preview }}</div>
+    <div class="song_mods">
+        <div class="editor"></div>
+        <div class="editMeta" (click)="editMeta( song.id )"></div>
+        <div class="delete" (click)="delete( song.id )"></div>
+    </div>
+</div>
+<div class="song_preview">{{ song.getPreview() }}</div>
 <table class="song_attr">
     <tr>
         <th>BPM</th>
         <td>
-            {{ song.bpm }}
+            {{ song.getBPM() }}
         </td>
     </tr>
     <tr>
@@ -18,3 +23,5 @@
         </td>
     </tr>
 </table>
+
+<app-song-event-form type="songs" [display]="displayAddForm" [id]="editID"></app-song-event-form>

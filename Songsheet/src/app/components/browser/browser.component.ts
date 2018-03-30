@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import * as moment from 'moment';
 
 import { Song } from '../../../ts/song';
 import { DATABASES, BROWSERTYPES } from '../../../ts/databases';
 import { Songgroup } from '../../../ts/songgroup';
-
-let moment = require('moment');
+import { Observable } from 'rxjs/Observable';
+import { DataService } from '../../services/data/data.service';
 
 @Component({
   selector: 'app-browser',
@@ -18,6 +19,7 @@ export class BrowserComponent implements OnInit {
   headline: string;
   search_text: string;
   displayAddForm: boolean = false;
+  editID = null;
   
   song_view: object = {
     headline: 'Your Songs',
@@ -30,11 +32,20 @@ export class BrowserComponent implements OnInit {
   songs: Song[] = [];
   events: Songgroup[] = [];
 
-  songscounter: number[] = [1];
-
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute, private dataService: DataService) { }
   
   ngOnInit() {
+    setInterval(() => {
+      this.dataService.getAll(DATABASES.songs).then( songs => {
+        this.songs = songs;
+      })
+    }, 300)
+    setInterval(() => {
+      this.dataService.getAll(DATABASES.events).then( events => {
+        this.events = events;
+      })
+    }, 300)
+
     this.route.params.subscribe(params => {
       this.type = params['type'];
       switch(this.type){
@@ -47,50 +58,11 @@ export class BrowserComponent implements OnInit {
           break;
       }
     });
+
   }
 
   toggleAddForm(){
     this.displayAddForm = !this.displayAddForm;
   }
-
-  changeDateFormat(that){
-    let val;
-    switch(that.type){
-      case 'date':
-        val = moment(that.value);
-        that.type = 'text';
-        that.value = !val.isValid() ? '' : val.locale('de').format('L');
-        break;
-      case 'text':
-        val = moment(that.value, 'DD.MM.YYYY');
-        that.type = 'date';
-        that.value = !val.isValid() ? '' : val.format('YYYY-MM-DD');
-        break;
-    }
-  }
-
-  submitSong(e){
-    e.preventDefault();
-  }
-
-  submitEvent(e){
-    e.preventDefault();
-  }
-
-  addSongField(e){
-    e.preventDefault();
-    this.songscounter.push(this.songscounter.length + 1);
-  }
-
-  removeSongField(e){
-    e.preventDefault();
-    if(this.songscounter.length > 1){
-      this.songscounter.pop();
-    }
-  }
-
-  addEntry(type: BROWSERTYPES, obj: [Song, Songgroup]){
-
-  }
-
+  
 }

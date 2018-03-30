@@ -9,7 +9,7 @@ input {
     width: 100%;
     padding: 10px;
     font-size: 1em;
-    margin: 20px 0;
+    margin: 0 0 20px 0;
 
     :focus{
         outline: none;
@@ -77,4 +77,8 @@ button {
 }
 .prev_box:hover{
     background: darkorange;
+
+    .song_title .song_mods {
+        display: inline-block !important;
+    }
 }

@@ -11,51 +11,5 @@
         </span>
     </div>
 
-    <div *ngIf="displayAddForm" class="popup">
-        <div class="popup_content">
-            <div class="closeCross" (click)="toggleAddForm()">X</div>
-            <span [ngSwitch]="type">
-                <span *ngSwitchCase="'songs'">
-                    <form>
-                        <input type="text" name="name" id="name" placeholder="Name*">
-    
-                        <input type="text" name="artist" id="artist" placeholder="Artist">
-    
-                        <input type="text" name="bpm" id="bpm" placeholder="BPM">
-    
-                        <input type="text" name="books" id="books" placeholder="Books">
-                        <div class="description">Separate each book with ';'</div>
-    
-                        <button type="submit" (click)="submitSong($event)">Add song</button>
-                    </form>
-                </span>
-    
-                <span *ngSwitchCase="'events'">
-                    <form>
-                        <input type="text" name="name" id="name" placeholder="Name*">
-    
-                        <input type="text" name="description" id="description" placeholder="Description">
-    
-                        <input type="text" name="date" id="date" placeholder="Date" (focus)="changeDateFormat($event.target)" (blur)="changeDateFormat($event.target)">
-    
-                        <label for="songs">Songs</label>
-                        <div *ngFor="let i of songscounter">
-                            <span class="songselector_label"><label for="song{{ i }}">{{ i }}.</label></span>
-                            <!-- if songs selectable-->
-                            <input *ngIf="songs.length > 0" type="text" name="song{{ i }}" id="song{{ i }}" class="songselector" list="songlist">
-                            <!-- else -->
-                            <input *ngIf="songs.length === 0" type="text" name="song{{ i }}" id="song{{ i }}" class="songselector" placeholder="No songs available" disabled>
-                            <datalist id="songlist">
-                                <option *ngFor="let s of songs">{{ s.name }}</option>
-                            </datalist>
-                        </div>
-                        <button (click)="addSongField($event)" class="half_button">+</button>
-                        <button (click)="removeSongField($event)" class="half_button">-</button>
-    
-                        <button type="submit" (click)="submitEvent($event)">Add Event</button>
-                    </form>
-                </span>
-            </span>
-        </div>
-    </div>
+    <app-song-event-form [type]="type" [display]="displayAddForm" [id]="null"></app-song-event-form>
 </div>
