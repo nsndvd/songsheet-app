@@ -34,12 +34,6 @@ export class BrowserComponent implements OnInit {
   constructor(private route: ActivatedRoute, private dataService: DataService) { }
   
   ngOnInit() {
-    setInterval(() => {
-      this.dataService.getAll(this.type).then( elems => {
-        this.elems = elems;
-      })
-    }, 300)
-
     this.route.params.subscribe(params => {
       this.type = params['type'];
       switch(this.type){
@@ -54,11 +48,21 @@ export class BrowserComponent implements OnInit {
       }
     });
 
+    this.updateElems();
   }
 
   showAddForm(e){
     this.editID = e;
     this.displayAddForm = true;
+  }
+
+  updateElems(){
+    setTimeout(() => {
+      this.dataService.getAll(this.type).then( elems => {
+        console.log(elems);
+        this.elems = elems;
+      })
+    }, 10);
   }
   
 }

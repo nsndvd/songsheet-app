@@ -13,6 +13,9 @@ export class SongComponent implements OnInit {
 
   @Input() song: Song;
   @Output() editID: EventEmitter<any> = new EventEmitter();
+  @Output() deleted: EventEmitter<any> = new EventEmitter();
+
+  display: string = 'inline-block';
 
   constructor(private dataService: DataService) { }
 
@@ -24,7 +27,8 @@ export class SongComponent implements OnInit {
   }
 
   delete(id){
-    this.dataService.delete(DATABASES.songs, id).then( res => console.log(res), err => console.log(err));
+    this.dataService.delete(DATABASES.songs, id);
+    this.deleted.emit();
   }
 
 }
