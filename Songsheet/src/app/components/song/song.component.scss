@@ -34,7 +34,7 @@
     right: 10px;
     top: calc(70% - 25px);
 }
-.editor, .settings, .delete{
+.editor, .editMeta, .delete{
     display: inline-block;
     width: 20px;
     height: 20px;
@@ -46,7 +46,7 @@
 .editor{
     background: yellow;
 }
-.settings{
+.editMeta{
     background: orange;
 }
 .delete{

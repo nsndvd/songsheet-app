@@ -1,6 +1,6 @@
-<div *ngIf="display" class="popup">
+<div class="popup">
     <div class="popup_content">
-        <div class="closeCross" (click)="toggleAddForm()">X</div>
+        <div class="closeCross" (click)="closeAddForm()">X</div>
         <span [ngSwitch]="type">
             <span *ngSwitchCase="'songs'">
                 <form>

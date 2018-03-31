@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import * as moment from 'moment';
 
 import { Song } from '../../../ts/song';
@@ -13,10 +13,17 @@ import { DataService } from '../../services/data/data.service';
 })
 export class SongEventFormComponent implements OnInit {
 
-  @Input() type: string;
-  @Input() display: boolean;
-  @Input() id: string; 
+  @Input() 
+  set display([type, id]){
+    this.initValues();
+    this.type = <DATABASES> type;
+    this.id = String(id);
+  };
+  @Output() displayOut: EventEmitter<any> = new EventEmitter();
 
+  displayBool: boolean = true;
+  type: DATABASES;
+  id: string;
   songscounter: number[] = [1];  
   songs: Song[] = [];
   
@@ -30,46 +37,18 @@ export class SongEventFormComponent implements OnInit {
   constructor(private dataService: DataService) { }
 
   ngOnInit() {
-    setInterval(() => {
-      this.dataService.getAll(DATABASES.songs).then( songs => {
-        this.songs = songs;
-      })
-    }, 1000);
+    this.initValues();
+   }
 
-    // init song/event if editMeta is called
-    if(this.id !== null){
-      switch(this.type){
-        case 'songs':
-          this.dataService.getByKey(DATABASES.songs, this.id).then( song => {
-            this.song = new Song(song);
-            this.songBooksStr = this.song.books.join('; ');
-          });
-          break;
-
-        case 'events':
-        this.dataService.getByKey(DATABASES.events, this.id).then( event => {
-          this.event = new Songgroup(event);
-          this.eventDate = this.event.getDate();
-          this.eventSongBuffer = ['']; // TODO
-        });
-        break;
-      }
-    }
-
-    // init eventSongBuffer
-  }
-
-  toggleAddForm(){
-    this.display = !this.display;
+  closeAddForm(){
+    this.displayBool = false;
     this.eventDate = this.event.getDate();
 
-    //reset event
-    this.event = new Songgroup();
-    this.eventDate = '';
-
-    //reset song
-    this.song = new Song();
-    this.songBooksStr = '';
+    this.displayOut.emit({
+      display: this.displayBool, 
+      type: this.type, 
+      id: this.id
+    });
   }
 
   changeDateFormat(that){
@@ -97,14 +76,14 @@ export class SongEventFormComponent implements OnInit {
     }
 
     this.dataService.upsert(DATABASES.songs, this.song);
-    this.toggleAddForm();    
+    this.closeAddForm();    
   }
 
   submitEvent(e){
     e.preventDefault();
     this.event.setDate(this.eventDate);
     this.dataService.upsert(DATABASES.events, this.event);
-    this.toggleAddForm();    
+    this.closeAddForm();    
   }
 
   addSongField(e){
@@ -116,6 +95,31 @@ export class SongEventFormComponent implements OnInit {
     e.preventDefault();
     if(this.songscounter.length > 1){
       this.songscounter.pop();
+    }
+  }
+
+  initValues(){
+    this.dataService.getAll(DATABASES.songs).then( songs => {
+      this.songs = songs;
+    })
+
+    // init song/event if editMeta is called
+    console.log(this.id);
+    if(this.id){
+      this.dataService.getByKey(this.type, this.id).then( elem => {
+        switch(this.type){
+          case DATABASES.songs:
+            this.song = new Song(elem);
+            this.songBooksStr = this.song.books ? this.song.books.join('; ') : '';
+            break;
+            
+          case DATABASES.events:
+            this.event = new Songgroup(event);
+            this.eventDate = this.event.getDate();
+            this.eventSongBuffer = ['']; // TODO
+            break;
+          }
+      });
     }
   }
 

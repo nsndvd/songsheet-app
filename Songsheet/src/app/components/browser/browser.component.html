@@ -1,15 +1,15 @@
 
 <div id="browser_content" class="content" [ngSwitch]="type">
-    <h3>{{ headline }}<div class="add" (click)="toggleAddForm()">+</div></h3>
+    <h3>{{ headline }}<div class="add" (click)="showAddForm()">+</div></h3>
     <div id="songs">
         <input id="search" [placeholder]="search_text" oninput="search(this)">
         <span *ngSwitchCase="'songs'">
-            <app-song *ngFor="let song of songs" [song]="song" class="prev_box"></app-song>
+            <app-song *ngFor="let song of elems" [song]="song" class="prev_box" (editID)="showAddForm($event)"></app-song>
         </span>
         <span *ngSwitchCase="'events'">
-            <app-event *ngFor="let event of events" [event]="event" class="prev_box"></app-event>
+            <app-event *ngFor="let event of elems" [event]="event" class="prev_box"></app-event>
         </span>
     </div>
 
-    <app-song-event-form [type]="type" [display]="displayAddForm" [id]="null"></app-song-event-form>
+    <app-song-event-form *ngIf="displayAddForm" [display]="[type, editID]" (displayOut)="displayAddForm = $event.display; type = $event.type; editID = $event.id"></app-song-event-form>
 </div>

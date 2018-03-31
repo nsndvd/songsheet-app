@@ -15,7 +15,7 @@ import { DataService } from '../../services/data/data.service';
 })
 export class BrowserComponent implements OnInit {
 
-  type: string;
+  type: DATABASES;
   headline: string;
   search_text: string;
   displayAddForm: boolean = false;
@@ -29,20 +29,14 @@ export class BrowserComponent implements OnInit {
     headline: 'Your Events',
     search_text: 'Search an event'
   }
-  songs: Song[] = [];
-  events: Songgroup[] = [];
+  elems: Song[] | Songgroup[] = [];
 
   constructor(private route: ActivatedRoute, private dataService: DataService) { }
   
   ngOnInit() {
     setInterval(() => {
-      this.dataService.getAll(DATABASES.songs).then( songs => {
-        this.songs = songs;
-      })
-    }, 300)
-    setInterval(() => {
-      this.dataService.getAll(DATABASES.events).then( events => {
-        this.events = events;
+      this.dataService.getAll(this.type).then( elems => {
+        this.elems = elems;
       })
     }, 300)
 
@@ -50,10 +44,11 @@ export class BrowserComponent implements OnInit {
       this.type = params['type'];
       switch(this.type){
         default:
-        case 'songs':
+        case DATABASES.songs:
+          this.type = DATABASES.songs;
           Object.assign(this, this.song_view);
           break;
-        case 'events':
+        case DATABASES.events:
           Object.assign(this, this.event_view);
           break;
       }
@@ -61,8 +56,9 @@ export class BrowserComponent implements OnInit {
 
   }
 
-  toggleAddForm(){
-    this.displayAddForm = !this.displayAddForm;
+  showAddForm(e){
+    this.editID = e;
+    this.displayAddForm = true;
   }
   
 }
