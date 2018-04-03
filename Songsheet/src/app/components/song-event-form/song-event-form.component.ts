@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import * as moment from 'moment';
 
 import { Song } from '../../../ts/song';
@@ -17,9 +17,12 @@ export class SongEventFormComponent implements OnInit {
   set display([type, id]){
     this.initValues();
     this.type = <DATABASES> type;
-    this.id = String(id);
+    if(id){
+      this.id = String(id);
+    }
   };
   @Output() displayOut: EventEmitter<any> = new EventEmitter();
+  @ViewChild('form_event', {read: ElementRef}) form: ElementRef;
 
   displayBool: boolean = true;
   type: DATABASES;
@@ -30,9 +33,9 @@ export class SongEventFormComponent implements OnInit {
   song: Song = new Song();
   songBooksStr: string = '';
 
-  event: Songgroup = new Songgroup();
-  eventDate: string = '';
-  eventSongBuffer: string[];
+  songgroup: Songgroup = new Songgroup();
+  songgroupDate: string = '';
+  songgroupSongBuffer: string[];
 
   constructor(private dataService: DataService) { }
 
@@ -40,9 +43,29 @@ export class SongEventFormComponent implements OnInit {
     this.initValues();
    }
 
+  ngAfterViewChecked(){
+    this.updateSelectSongs();
+  }
+
+  setSong(model){
+    let song = Number(model.name[model.name.length-1]) - 1;
+    let songUUID = model.value;
+    this.songgroupSongBuffer[song] = songUUID;
+    this.updateSelectSongs();
+  }
+
+  updateSelectSongs(){
+    this.songgroupSongBuffer.forEach( (uuid, i) => {
+      let dom = this.form.nativeElement.querySelector('#song'+(i+1)+' [value="'+uuid+'"]') as HTMLSelectElement;
+      if(dom) {
+        dom.selected = true;
+      }
+    });
+  }
+
   closeAddForm(){
     this.displayBool = false;
-    this.eventDate = this.event.getDate();
+    this.songgroupDate = this.songgroup.getDate();
 
     this.displayOut.emit({
       display: this.displayBool, 
@@ -81,20 +104,23 @@ export class SongEventFormComponent implements OnInit {
 
   submitEvent(e){
     e.preventDefault();
-    this.event.setDate(this.eventDate);
-    this.dataService.upsert(DATABASES.events, this.event);
-    this.closeAddForm();    
+    this.songgroup.setDate(this.songgroupDate);
+    //remove empty songs from buffer
+    this.songgroup.setSongs(this.songgroupSongBuffer);
+
+    this.dataService.upsert(DATABASES.events, this.songgroup);
+    this.closeAddForm();
   }
 
   addSongField(e){
     e.preventDefault();
-    this.songscounter.push(this.songscounter.length + 1);
+    this.songgroupSongBuffer.push('');
   }
 
   removeSongField(e){
     e.preventDefault();
-    if(this.songscounter.length > 1){
-      this.songscounter.pop();
+    if(this.songgroupSongBuffer.length > 1){
+      this.songgroupSongBuffer.pop();
     }
   }
 
@@ -104,7 +130,6 @@ export class SongEventFormComponent implements OnInit {
     })
 
     // init song/event if editMeta is called
-    console.log(this.id);
     if(this.id){
       this.dataService.getByKey(this.type, this.id).then( elem => {
         switch(this.type){
@@ -114,13 +139,16 @@ export class SongEventFormComponent implements OnInit {
             break;
             
           case DATABASES.events:
-            this.event = new Songgroup(event);
-            this.eventDate = this.event.getDate();
-            this.eventSongBuffer = ['']; // TODO
+            this.songgroup = new Songgroup(elem);
+            this.songgroupDate = this.songgroup.getDate();
+            this.songgroupSongBuffer = this.songgroup.getSongs().concat(['']);
             break;
           }
       });
+    } else {
+      this.songgroupSongBuffer = [''];
     }
+
   }
 
 }

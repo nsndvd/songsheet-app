@@ -29,7 +29,8 @@ export class BrowserComponent implements OnInit {
     headline: 'Your Events',
     search_text: 'Search an event'
   }
-  elems: Song[] | Songgroup[] = [];
+  song_elems: Song[] = [];
+  songgroup_elems: Songgroup[] = [];
 
   constructor(private route: ActivatedRoute, private dataService: DataService) { }
   
@@ -46,9 +47,9 @@ export class BrowserComponent implements OnInit {
           Object.assign(this, this.event_view);
           break;
       }
-    });
 
-    this.updateElems();
+      this.updateElems();
+    });
   }
 
   showAddForm(e){
@@ -57,10 +58,22 @@ export class BrowserComponent implements OnInit {
   }
 
   updateElems(){
+    let arr = [];
     setTimeout(() => {
-      this.dataService.getAll(this.type).then( elems => {
-        console.log(elems);
-        this.elems = elems;
+      this.dataService.getAll(this.type).then( res => {
+        for (let e of res) {
+          if(this.type === DATABASES.songs){
+            arr.push(new Song(e));
+          } else {
+            arr.push(new Songgroup(e));
+          }
+        }
+        
+        if(this.type === DATABASES.songs){
+          this.song_elems = arr;
+        } else {
+          this.songgroup_elems = arr;
+        }
       })
     }, 10);
   }

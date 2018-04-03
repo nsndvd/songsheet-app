@@ -78,7 +78,7 @@ button {
 .prev_box:hover{
     background: darkorange;
 
-    .song_title .song_mods {
+    .song_title .mods, .event_title .mods {
         display: inline-block !important;
     }
 }

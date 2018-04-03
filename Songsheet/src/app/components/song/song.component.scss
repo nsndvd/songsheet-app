@@ -28,7 +28,7 @@
     margin: 0;
 }
 
-.song_mods{
+.mods{
     display: none;
     position: absolute;
     right: 10px;
@@ -40,7 +40,7 @@
     height: 20px;
     opacity: 0.7;
 }
-.editor:hover, .settings:hover, .delete:hover{ 
+.editor:hover, .editMeta:hover, .delete:hover{ 
     opacity: 1 !important;
 }
 .editor{

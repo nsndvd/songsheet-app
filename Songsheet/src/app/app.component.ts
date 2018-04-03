@@ -14,6 +14,6 @@ export class AppComponent {
 
   ngOnInit(){
     //TODO: load data from dir or force user to set defaultDir
-    this.DataService.getByKey(DATABASES.settings, 'defaultPath').then(res => console.log(res))
+    //this.DataService.getByKey(DATABASES.settings, 'defaultPath').then(res => console.log(res))
   }
 }

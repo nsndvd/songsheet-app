@@ -10,11 +10,11 @@ interface ISonggroup{
 }
 
 export class Songgroup {
-    id?: string = '';
+    id?: string;
     name: string = '';
     description?: string = '';
     private date? = null;
-    songs: Song[] = [];
+    private songs: string[] = []; //uuids of songs
 
     constructor(params?: string | any){
         if(typeof params === 'string'){
@@ -33,7 +33,7 @@ export class Songgroup {
     }
 
     getDate(){
-        if(this.date !== null){
+        if(this.date){
             return this.date.locale('de').format('L');
         }
         return '';
@@ -46,7 +46,14 @@ export class Songgroup {
         } else {
             val = moment(date);
         }
-        console.log(val, val.isValid());
         this.date = !val.isValid() ? null : val;
+    }
+
+    getSongs(){
+        return this.songs;
+    }
+
+    setSongs(arr){
+        this.songs = arr.filter(Boolean).filter(String);
     }
 }

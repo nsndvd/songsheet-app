@@ -1,14 +1,19 @@
-<div class="prev_box">
-<a href="event.link" class="event_title">{{ event.name }}</a>
+<div class="event_title">
+    {{ event.name }}
+    <div class="mods">
+        <div class="editor"></div>
+        <div class="editMeta" (click)="editMeta( event.id )"></div>
+        <div class="delete" (click)="delete( event.id )"></div>
+    </div>
+</div>
 <div class="event_preview">{{ event.description }}</div>
 <table class="event_attr">
     <tr>
         <th>Songs</th>
         <td>
             <ul>
-                <li *ngFor="let song of event.songs">{{ song }}</li>
+                <li *ngFor="let s of songs">{{ s }}</li>
             </ul>
         </td>
     </tr>
 </table>
-</div>

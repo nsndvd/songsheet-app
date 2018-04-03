@@ -8,15 +8,13 @@
                     <input type="text" name="name" id="name" 
                         placeholder="Title*" 
                         required 
-                        [value]="song.name" 
-                        (input)="song.name = $event.target.value"
+                        [(ngModel)]="song.name"
                     >
 
                     <label for="name">Artist</label>
                     <input type="text" name="artist" id="artist" 
                         placeholder="Artist" 
-                        [value]="song.artist" 
-                        (input)="song.artist = $event.target.value"
+                        [(ngModel)]="song.artist"
                     >
 
                     <label for="name">BPM</label>                        
@@ -29,30 +27,30 @@
                     <label for="name">Books</label>                        
                     <input type="text" name="books" id="books" 
                         placeholder="Books" 
-                        [value]="songBooksStr" 
-                        (input)="songBooksStr = $event.target.value"
+                        [(ngModel)]="songBooksStr"
                     >
                     <div class="description">Separate each book with ';'</div>
                     
-                    <button type="submit" (click)="submitSong($event)">Add song</button>
+                    <button type="submit" (click)="submitSong($event)">Save song</button>
                 </form>
             </span>
 
             <span *ngSwitchCase="'events'">
-                <form>
+                <form #form_event>
                     <label for="name">Name</label>
                     <input type="text" name="name" id="name" 
                         placeholder="Name*" 
                         required 
-                        [value]="event.name"
-                        (input)="event.name = $event.target.value"                         
+                        [(ngModel)]="songgroup.name"
+                        ngModel
+                        #eventName="ngModel"                  
                     >
+                    <div class="error" *ngIf="eventName.touched && !eventName.valid">An Event has to have a name.</div>
 
                     <label for="description">Description</label>
                     <input type="text" name="description" id="description" 
                         placeholder="Description" 
-                        [value]="event.description"
-                        (input)="event.description = $event.target.value"                            
+                        [(ngModel)]="songgroup.description"                           
                     >
 
                     <label for="date">Date</label>
@@ -60,38 +58,37 @@
                         placeholder="Date" 
                         (focus)="changeDateFormat($event.target)" 
                         (blur)="changeDateFormat($event.target)" 
-                        [value]="eventDate"
-                        (input)="eventDate = $event.target.value"
+                        [(ngModel)]="songgroupDate"
                     >
 
                     <label for="songs">Songs</label>
-                    <div *ngFor="let s of event.songs; let i = index">
-                        <span class="songselector_label"><label for="song{{ i }}">{{ i }}.</label></span>
+                    <div *ngFor="let songUUID of songgroupSongBuffer; let i = index">
+                        <span class="songselector_label"><label for="song{{ i+1 }}">{{ i+1 }}.</label></span>
                         <!-- if songs selectable-->
-                        <input type="text" name="song{{ i }}" id="song{{ i }}"
-                            *ngIf="songs.length > 0" //TODO debug value, input (how to init that songs are shown with one empty)?!
+                        <select name="song{{ i+1 }}" id="song{{ i+1 }}"
+                            *ngIf="songs.length > 0"
                             class="songselector" 
-                            list="songlist" 
-                            [value]="s"
-                            (input)="event.songs[i] = $event.target.value"                                     
+                            list="songlist"
+                            (change)="setSong(song)"
+                            ngModel
+                            #song="ngModel"
                         >
+                            <option value="" disabled>Choose a song</option>
+                            <option *ngFor="let s of songs" value="{{s.id}}">{{ s.name }}</option>
+                        </select>
                        
                         <!-- else -->
-                        <input type="text" name="song{{ i }}" id="song{{ i }}" 
+                        <input type="text" name="song{{ i+1 }}" id="song{{ i+1 }}" 
                             *ngIf="songs.length === 0"    
                             class="songselector" 
                             placeholder="No songs available" 
                             disabled
                         >
-
-                        <datalist id="songlist">
-                            <option *ngFor="let s of songs">{{ s.name }}</option>
-                        </datalist>
                     </div>
                     <button (click)="addSongField($event)" class="half_button">+</button>
                     <button (click)="removeSongField($event)" class="half_button">-</button>
 
-                    <button type="submit" (click)="submitEvent($event)">Add Event</button>
+                    <button type="submit" (click)="submitEvent($event)">Save event</button>
                 </form>
             </span>
         </span>

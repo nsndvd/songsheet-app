@@ -15,8 +15,6 @@ export class SongComponent implements OnInit {
   @Output() editID: EventEmitter<any> = new EventEmitter();
   @Output() deleted: EventEmitter<any> = new EventEmitter();
 
-  display: string = 'inline-block';
-
   constructor(private dataService: DataService) { }
 
   ngOnInit() {

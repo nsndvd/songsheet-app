@@ -51,7 +51,7 @@ export class Song {
         return this.bpm;
     }
 
-    setBPM(val: [string, number]){
+    setBPM(val: string | number){
         if (typeof val === 'string' && !isNaN(Number(val)) && val !== '') {
             this.bpm = Number(val);
         } else if(typeof val === 'number') {

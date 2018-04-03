@@ -1,5 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Songgroup } from '../../../ts/songgroup';
+import { DataService } from '../../services/data/data.service';
+import { DATABASES } from '../../../ts/databases';
+import * as q from 'q';
 
 @Component({
   selector: 'app-event',
@@ -9,10 +12,35 @@ import { Songgroup } from '../../../ts/songgroup';
 export class EventComponent implements OnInit {
 
   @Input() event: Songgroup;
+  @Output() editID: EventEmitter<any> = new EventEmitter();
+  @Output() deleted: EventEmitter<any> = new EventEmitter();
+  JSON = JSON;
 
-  constructor() { }
+  constructor(private dataService: DataService) { }
 
-  ngOnInit() {
+  songs: string[] = [];
+
+  ngOnInit() { 
+    if(!this.event.getSongs){
+      this.event = new Songgroup(this.event);
+    }
+    this.setSongs();
   }
 
+  editMeta(id){
+    this.editID.emit(id);
+  }
+
+  delete(id){
+    this.dataService.delete(DATABASES.events, id);
+    this.deleted.emit();
+  }
+
+  setSongs(){
+    this.event.getSongs().forEach( uuid => {
+      this.dataService.getByKey(DATABASES.songs, uuid).then(res => {
+        this.songs.push(res.name);
+      });
+    });
+  }
 }

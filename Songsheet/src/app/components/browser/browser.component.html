@@ -4,10 +4,10 @@
     <div id="songs">
         <input id="search" [placeholder]="search_text" oninput="search(this)">
         <span *ngSwitchCase="'songs'">
-            <app-song *ngFor="let song of elems" [song]="song" class="prev_box" (editID)="showAddForm($event)" (deleted)="updateElems()"></app-song>
+            <app-song *ngFor="let song of song_elems" [song]="song" class="prev_box" (editID)="showAddForm($event)" (deleted)="updateElems()"></app-song>
         </span>
         <span *ngSwitchCase="'events'">
-            <app-event *ngFor="let event of elems" [event]="event" class="prev_box"></app-event>
+            <app-event *ngFor="let event of songgroup_elems" [event]="event" class="prev_box" (editID)="showAddForm($event)" (deleted)="updateElems()"></app-event>
         </span>
     </div>
 
