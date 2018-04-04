@@ -1,5 +1,9 @@
 <div class="content">
   <h3>Settings</h3>
   <label>Dropboxpath</label>
-  <input type="file">
+  <input type="file" (change)="setDefaultPath($event.target)" ngModel required #pathinput="ngModel" webkitdirectory [value]="path">
+  <div class="message" *ngIf="!pathinput.valid">
+    <h3>Welcome to Songsheet.</h3>
+    To use this app, you have to set a path to your folder, where you want to store all data.
+  </div>
 </div>

@@ -29,6 +29,9 @@ export class DataService {
     if(typeof data !== 'object'){
       throw new Error('data is not an object. Only objects can be added to Indexeddb');
     }
+    if(!data.id && database === DATABASES.settings){
+      throw new Error('Settings need an id.');
+    }
     // settings has a different id property
     if(!data.id && database !== DATABASES.settings){
       data.id = uuid();

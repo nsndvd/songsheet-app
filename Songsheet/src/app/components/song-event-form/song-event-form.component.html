@@ -8,8 +8,11 @@
                     <input type="text" name="name" id="name" 
                         placeholder="Title*" 
                         required 
+                        ngModel
                         [(ngModel)]="song.name"
+                        #title="ngModel"
                     >
+                    <div class="error" *ngIf="title.touched && !title.valid">A song has to have a name.</div>
 
                     <label for="name">Artist</label>
                     <input type="text" name="artist" id="artist" 

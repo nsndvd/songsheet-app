@@ -82,3 +82,21 @@ button {
         display: inline-block !important;
     }
 }
+
+.message{
+    box-sizing: border-box;
+    width: 100%;
+    padding: 40px;
+    background: lightgreen;
+    word-break: break-all;
+    margin: 40px 0;
+}
+
+.error{
+    box-sizing: border-box;
+    width: 100%;
+    padding: 20px;
+    background: lightcoral;
+    word-break: break-all;
+    margin: -10px 0 10px 0;    
+}

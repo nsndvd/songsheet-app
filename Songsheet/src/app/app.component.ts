@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { DATABASES } from '../ts/databases';
 import { DataService } from './services/data/data.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -10,10 +11,14 @@ import { DataService } from './services/data/data.service';
 })
 export class AppComponent {
 
-  constructor(private DataService: DataService){ }
+  constructor(private DataService: DataService, private router: Router){ }
 
   ngOnInit(){
-    //TODO: load data from dir or force user to set defaultDir
-    //this.DataService.getByKey(DATABASES.settings, 'defaultPath').then(res => console.log(res))
+    // load data from dir or force user to set defaultDir
+    this.DataService.getByKey(DATABASES.settings, 'defaultPath').then(res => {
+      if(!res){
+        this.router.navigateByUrl('/settings')
+      }
+    });
   }
 }

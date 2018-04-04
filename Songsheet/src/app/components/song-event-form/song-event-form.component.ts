@@ -55,12 +55,14 @@ export class SongEventFormComponent implements OnInit {
   }
 
   updateSelectSongs(){
-    this.songgroupSongBuffer.forEach( (uuid, i) => {
-      let dom = this.form.nativeElement.querySelector('#song'+(i+1)+' [value="'+uuid+'"]') as HTMLSelectElement;
-      if(dom) {
-        dom.selected = true;
-      }
-    });
+    if(this.form){
+      this.songgroupSongBuffer.forEach( (uuid, i) => {
+        let dom = this.form.nativeElement.querySelector('#song'+(i+1)+' [value="'+uuid+'"]') as HTMLSelectElement;
+        if(dom) {
+          dom.selected = true;
+        }
+      });
+    }
   }
 
   closeAddForm(){
