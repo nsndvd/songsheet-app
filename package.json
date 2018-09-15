@@ -6,7 +6,7 @@
   "scripts": {
     "check-dependencies": "node bin/check-dependencies",
     "check-code": "node bin/check-code",
-    "start": "electron app/"
+    "start": "electron Songsheet/"
   },
   "repository": {
     "type": "git",
