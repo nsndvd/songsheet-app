@@ -4,6 +4,8 @@ import { Routes, RouterModule } from '@angular/router';
 import {BrowserComponent} from './components/browser/browser.component';
 import {EditorComponent} from './components/editor/editor.component';
 import {SettingsComponent} from './components/settings/settings.component';
+import { ColorComponent } from './components/color/color.component';
+import { IconsComponent } from './components/icons/icons.component';
 
 const routes: Routes = [
   {
@@ -22,6 +24,14 @@ const routes: Routes = [
   {
     path: 'settings',
     component: SettingsComponent
+  },
+  {
+    path: 'colors',
+    component: ColorComponent
+  },
+  {
+    path: 'icons',
+    component: IconsComponent
   }
 ];
 

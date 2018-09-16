@@ -17,7 +17,7 @@ export class AppComponent {
     // load data from dir or force user to set defaultDir
     this.DataService.getByKey(DATABASES.settings, 'defaultPath').then(res => {
       if(!res){
-        this.router.navigateByUrl('/settings')
+        //this.router.navigateByUrl('/settings')
       }
     });
   }

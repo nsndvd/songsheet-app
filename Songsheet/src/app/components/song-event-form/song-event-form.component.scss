@@ -1,3 +1,13 @@
+@import '../../../assets/icons';
+@import '../../../assets/colors';
+
+.closeCross{
+    position: fixed;
+    top: calc(50% - 130px);
+    right: calc(50% - 305px);
+    color: $grey;
+    cursor: pointer;
+}
 .songselector{
     width: 80%;
     margin-left: 30px;

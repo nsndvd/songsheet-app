@@ -1,0 +1,13 @@
+@import "../../../assets/icons.scss";
+
+#content{
+    padding: 100px;
+
+    .icon{
+        font-size: 100px;
+    }
+    .icon-bpm, .icon-books{
+        width: 100px;
+        height: 100px;
+    }
+}

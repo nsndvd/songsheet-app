@@ -12,6 +12,8 @@ import { NavComponent } from './components/nav/nav.component';
 import { SongComponent } from './components/song/song.component';
 import { EventComponent } from './components/event/event.component';
 import { SongEventFormComponent } from './components/song-event-form/song-event-form.component';
+import { ColorComponent } from './components/color/color.component';
+import { IconsComponent } from './components/icons/icons.component';
 
 import { DataService } from './services/data/data.service';
 
@@ -24,7 +26,9 @@ import { DataService } from './services/data/data.service';
     NavComponent,
     SongComponent,
     EventComponent,
-    SongEventFormComponent
+    SongEventFormComponent,
+    ColorComponent,
+    IconsComponent
   ],
   imports: [
     BrowserModule,
