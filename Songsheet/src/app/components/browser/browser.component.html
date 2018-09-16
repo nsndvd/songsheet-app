@@ -1,6 +1,6 @@
 
 <div id="browser_content" class="content" [ngSwitch]="type">
-    <h3>{{ headline }}<div class="add" (click)="showAddForm()">+</div></h3>
+    <h3>{{ headline }}<i class="icon" (click)="showAddForm()">add_box</i></h3>
     <div id="songs">
         <input id="search" [placeholder]="search_text" oninput="search(this)">
         <span *ngSwitchCase="'songs'">

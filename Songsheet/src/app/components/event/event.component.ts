@@ -39,7 +39,8 @@ export class EventComponent implements OnInit {
   setSongs(){
     this.event.getSongs().forEach( uuid => {
       this.dataService.getByKey(DATABASES.songs, uuid).then(res => {
-        this.songs.push(res.name);
+        if(res)
+          this.songs.push(res.name);
       });
     });
   }

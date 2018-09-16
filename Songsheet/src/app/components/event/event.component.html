@@ -1,9 +1,9 @@
 <div class="event_title">
     {{ event.name }}
     <div class="mods">
-        <div class="editor"></div>
-        <div class="editMeta" (click)="editMeta( event.id )"></div>
-        <div class="delete" (click)="delete( event.id )"></div>
+        <i class="icon">edit</i>
+        <i class="icon" (click)="editMeta( event.id )">settings</i>
+        <i class="icon" (click)="delete( event.id )">delete</i>
     </div>
 </div>
 <div class="event_preview">{{ event.description }}</div>
