@@ -5,5 +5,7 @@ export class Song {
     bpm?: number;
     books?: string[];
     blocks?: any;
-    order?: string[]; 
+    order?: string[];
+    annotationCells: number = 0;
+    maxLineWidth: number = 0;
 }

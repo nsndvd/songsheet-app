@@ -13,7 +13,7 @@ export class Block{
     title: string;
     lines: Line[];
     annotationCells: number;
-    maxLineWidth: number;
+    maxLineWidth: number = 0;
     maxDiffAnnotationsPerRepition: number;
     printed?: number;
 }

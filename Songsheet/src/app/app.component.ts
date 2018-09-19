@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { DATABASES } from '../ts/databases';
-import { DataService } from './services/data/data.service';
+import { DataService } from './services/data.service';
 import { Router } from '@angular/router';
 
 @Component({

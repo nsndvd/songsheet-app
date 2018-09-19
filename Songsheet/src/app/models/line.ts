@@ -15,6 +15,7 @@ export class Line{
     lyricsWidth: number;
     differentAnnotations: number = 0;
     annotationCells: number = 0;
+    printed: number = 0;
 }
 
 class Lyric{

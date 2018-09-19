@@ -14,9 +14,13 @@ import { EventComponent } from './components/event/event.component';
 import { SongEventFormComponent } from './components/song-event-form/song-event-form.component';
 import { ColorComponent } from './components/color/color.component';
 import { IconsComponent } from './components/icons/icons.component';
+import { PreviewComponent } from './components/preview/preview.component';
 
-import { DataService } from './services/data/data.service';
-import { ParserService } from './services/parser/parser.service';
+import { DataService } from './services/data.service';
+import { ParserService } from './services/parser.service';
+import { HtmlFactoryService } from './services/html-factory.service';
+
+import { SafePipe } from './pipes/safe.pipe';
 
 @NgModule({
   declarations: [
@@ -29,7 +33,9 @@ import { ParserService } from './services/parser/parser.service';
     EventComponent,
     SongEventFormComponent,
     ColorComponent,
-    IconsComponent
+    IconsComponent,
+    SafePipe,
+    PreviewComponent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +44,8 @@ import { ParserService } from './services/parser/parser.service';
   ],
   providers: [
     DataService,
-    ParserService
+    ParserService,
+    HtmlFactoryService
   ],
   bootstrap: [AppComponent]
 })

@@ -6,7 +6,7 @@ import { Song } from '../../../ts/song';
 import { DATABASES, BROWSERTYPES } from '../../../ts/databases';
 import { Songgroup } from '../../../ts/songgroup';
 import { Observable } from 'rxjs/Observable';
-import { DataService } from '../../services/data/data.service';
+import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-browser',

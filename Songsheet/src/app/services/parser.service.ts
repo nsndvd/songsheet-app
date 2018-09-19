@@ -1,23 +1,31 @@
 import { Injectable } from '@angular/core';
-import { Song } from '../../models/song';
-import { Block } from '../../models/block';
-import { Line } from '../../models/line';
+import { Song } from '../models/song';
+import { Block } from '../models/block';
+import { Line } from '../models/line';
+import { HtmlFactoryService } from './html-factory.service';
+import * as wkhtml from 'wkhtmltopdf';
 
 @Injectable()
 export class ParserService {
 
   private regexs = {
     newline: /\r?\n/,
-    header: /\[(?:\s*?(title|bpm|artist|books)\s*:\s*([\w\s-_]*)\s*(?:;|\])?)?(?:\s*?(title|bpm|artist|books)\s*:\s*([\w\s-_]*)\s*(?:;|\]){1})?(?:\s*?(title|bpm|artist|books)\s*:\s*([\w\s-_]*)\s*(?:;|\]){1})?(?:\s*?(title|bpm|artist|books)\s*:\s*([\w\s-_]*)\s*(?:;|\]){1})?/gi,
+    header: /\[(?:\s*?(title|bpm|artist|books)\s*:\s*([\w\s-_,]*)\s*(?:;|\])?)?(?:\s*?(title|bpm|artist|books)\s*:\s*([\w\s-_,]*)\s*(?:;|\]){1})?(?:\s*?(title|bpm|artist|books)\s*:\s*([\w\s-_,]*)\s*(?:;|\]){1})?(?:\s*?(title|bpm|artist|books)\s*:\s*([\w\s-_,]*)\s*(?:;|\]){1})?/gi,
     block: /\[(?:Block\s*:\s*)([\w\s-_]*)\]/gi,
     order: /\[(?:order\s*:\s*)([\w\s-_,]*)\]/gi,
-    chord: /(?:\[\s*)([\w\#]*)(?:\s*\])/gi,
+    chord: /(?:\[\s*)([\w<>\*\#]*)(?:\s*\])/gi,
     invChord: /([\w\#]+)/gi
   }
 
-  constructor() { }
+  constructor(private htmlFactory: HtmlFactoryService) { }
 
   public obj2PDF( song:Song ){
+    const html = this.obj2HTML(song);
+    wkhtml(html).pipe();
+  }
+
+  public obj2HTML( song: Song): string {
+    return this.htmlFactory.song2html(song);
   }
 
   public obj2Str( song:Song ): string {
@@ -32,28 +40,32 @@ export class ParserService {
   }
 
   public str2Obj( str:string ): Song {
-    let newSong = new Song();
+    const newSong = new Song();
     // get meta
-    let meta = this._getMeta(str);
+    const meta = this._getMeta(str);
     for(let m in meta){
       newSong[m] = meta[m];
     }
     
     // get blocks
     newSong.blocks = this._getAllBlocks(str);
+    for (let b of newSong.blocks){
+      newSong.annotationCells = this._max(b.annotationCells, newSong.annotationCells);
+      newSong.maxLineWidth = this._max(b.maxLineWidth, newSong.maxLineWidth);
+    }
     
     return newSong;
   }
 
   private _getMeta(str:string): object {
-    let meta = {};
+    const meta = {};
     
-    let order = this.regexs.order.exec(str);
+    const order = this.regexs.order.exec(str);
     if(order){
       meta['order'] = this._deepTrim(order[1].split(','));
     }
     
-    let matches = this.regexs.header.exec(str);
+    const matches = this.regexs.header.exec(str);
     if(matches && matches.length > 2){
 
       for(let i = 1; i < matches.length; i+=2){
@@ -67,9 +79,9 @@ export class ParserService {
   }
 
   private _getAllBlocks(str:string): Block[]{
-    let blocks: Block[] = [];
-    let blockStarts: number[] = [];
-    let titles: string[] = [];
+    const blocks: Block[] = [];
+    const blockStarts: number[] = [];
+    const titles: string[] = [];
     let m;
     do{
       m = this.regexs.block.exec(str);
@@ -91,7 +103,7 @@ export class ParserService {
   }
 
   private _getBlock(title:string, str:string): Block{
-    let newBlock = new Block();
+    const newBlock = new Block();
     newBlock.title = title;
     newBlock.lines = this._getAllLines(str);
 
@@ -104,20 +116,20 @@ export class ParserService {
   }
 
   private _getAllLines(str:string): Line[]{
-    let lines: Line[] = [];
+    const lines: Line[] = [];
     for (let l of str.split(this.regexs.newline)) {
       if(l.trim() === '' || this.regexs.block.test(l))
         continue;
-      let line = this._getLine(l);
+      const line = this._getLine(l);
       lines.push(line);
     }
     return lines;
   }
 
   private _getLine(str:string): Line {
-    let newLine: Line = new Line();
+    const newLine: Line = new Line();
     newLine.lyrics.bottomLine = str;
-    let matches = [];
+    const matches = [];
 
     let m;
     do{
@@ -128,13 +140,13 @@ export class ParserService {
       }
     } while(m);
 
-    let annotationblocks = newLine.lyrics.bottomLine.split('|');
+    const annotationblocks = newLine.lyrics.bottomLine.split('|');
     newLine.annotationCells = annotationblocks.length - 1;
     for (let anno of annotationblocks) {
       if(anno === annotationblocks[0])
         continue;
       
-      let annotations = this._deepTrim(anno.split(';'));
+      const annotations = this._deepTrim(anno.split(';'));
       newLine.differentAnnotations = this._max(newLine.differentAnnotations, annotations.length);
       newLine.annotations.push(annotations);
     }
@@ -156,7 +168,7 @@ export class ParserService {
   }
 
   private _deepTrim(arr:string[]): string[]{
-    let res: string[] = [];
+    const res: string[] = [];
     arr.forEach((val, index, arr) => {
       res.push(val.trim());
     });
@@ -166,14 +178,14 @@ export class ParserService {
   public meta2str(song: Song): string{
     let str = '';
     //meta
-    let title = song.title !== "" ? 'title: '+song.title+';' : '';
-    let artist = song.artist !== "" ? 'artist: '+song.artist+';' : '';
-    let bpm = song.bpm ? 'title: '+song.bpm+';' : '';
-    let books = song.books ? 'books: '+song.books.join(',')+';' : '';
+    const title = song.title !== "" ? 'title: '+song.title+';' : '';
+    const artist = song.artist !== "" ? 'artist: '+song.artist+';' : '';
+    const bpm = song.bpm ? 'bpm: '+song.bpm+';' : '';
+    const books = song.books ? 'books: '+song.books.join(',')+';' : '';
     str += '['+title+artist+bpm+books+']\n\n';
 
     //order
-    let order = song.order ? '[order: '+song.order.join(',')+']' : '';
+    const order = song.order ? '[order: '+song.order.join(',')+']' : '';
     str += order+'\n\n';
     return str;
   }
@@ -189,7 +201,7 @@ export class ParserService {
   }
 
   private _joinTopAndBottomLine(line:Line): string {
-    let finalLine = [];
+    const finalLine = [];
 
     let m;
     let matches = [];
@@ -203,9 +215,9 @@ export class ParserService {
     matches = matches.reverse(); // to ensure correct position
     for(let i = 0; i <= matches.length; i++) {
       // if last part start from 0
-      let start = i === matches.length ? 0 : matches[i].index;
+      const start = i === matches.length ? 0 : matches[i].index;
       // if first -> until end else prev position
-      let end = i === 0 ? undefined : i === matches.length ? matches[i-1].index : matches[i-1].index - matches[i].index;
+      const end = i === 0 ? undefined : i === matches.length ? matches[i-1].index : matches[i-1].index - matches[i].index;
       finalLine.push(line.lyrics.bottomLine.substr(start, end));
 
       if(i < matches.length)
@@ -216,7 +228,7 @@ export class ParserService {
   }
 
   private _joinAnnotations(l:Line): string {
-    let annotations = [];
+    const annotations = [];
 
     for(let anno of l.annotations) {
       annotations.push(anno.join('; '));
