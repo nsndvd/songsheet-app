@@ -3,7 +3,7 @@ import { Song } from '../models/song';
 import { Block } from '../models/block';
 import { Line } from '../models/line';
 import { HtmlFactoryService } from './html-factory.service';
-import * as wkhtml from 'wkhtmltopdf';
+//import * as wkhtml from 'wkhtmltopdf';
 
 @Injectable()
 export class ParserService {
@@ -21,7 +21,7 @@ export class ParserService {
 
   public obj2PDF( song:Song ){
     const html = this.obj2HTML(song);
-    wkhtml(html).pipe();
+    //wkhtml(html).pipe();
   }
 
   public obj2HTML( song: Song): string {
