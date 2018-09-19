@@ -20,6 +20,7 @@ export class BrowserComponent implements OnInit {
   search_text: string;
   displayAddForm: boolean = false;
   editID = null;
+  searchInput:string = '';
   
   song_view: object = {
     headline: 'Your Songs',

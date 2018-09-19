@@ -1,3 +1,6 @@
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSidenavModule, MatButtonModule, MatInputModule, MatCardModule } from '@angular/material';
+import { MatIconModule } from '@angular/material/icon';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -8,7 +11,6 @@ import { AppComponent } from './app.component';
 import { BrowserComponent } from './components/browser/browser.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { EditorComponent } from './components/editor/editor.component';
-import { NavComponent } from './components/nav/nav.component';
 import { SongComponent } from './components/song/song.component';
 import { EventComponent } from './components/event/event.component';
 import { SongEventFormComponent } from './components/song-event-form/song-event-form.component';
@@ -28,7 +30,6 @@ import { SafePipe } from './pipes/safe.pipe';
     BrowserComponent,
     SettingsComponent,
     EditorComponent,
-    NavComponent,
     SongComponent,
     EventComponent,
     SongEventFormComponent,
@@ -40,7 +41,13 @@ import { SafePipe } from './pipes/safe.pipe';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule,
+    MatSidenavModule,
+    MatButtonModule,
+    MatInputModule,
+    MatIconModule,
+    MatCardModule
   ],
   providers: [
     DataService,
