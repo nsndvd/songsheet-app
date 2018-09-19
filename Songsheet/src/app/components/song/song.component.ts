@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { Song } from '../../../ts/song';
-import { DataService } from '../../services/data/data.service';
+import { DataService } from '../../services/data.service';
 import { DATABASES } from '../../../ts/databases';
 
 @Component({

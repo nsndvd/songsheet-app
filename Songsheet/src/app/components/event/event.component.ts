@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Songgroup } from '../../../ts/songgroup';
-import { DataService } from '../../services/data/data.service';
+import { DataService } from '../../services/data.service';
 import { DATABASES } from '../../../ts/databases';
 import * as q from 'q';
 

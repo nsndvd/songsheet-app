@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 let uuid = require('uuid/v1');
 
 import idb, { DB } from 'idb';
-import { DATABASES } from '../../../ts/databases';
-import { Song } from '../../../ts/song';
-import { Songgroup } from '../../../ts/songgroup';
+import { DATABASES } from '../../ts/databases';
+import { Song } from '../../ts/song';
+import { Songgroup } from '../../ts/songgroup';
 
 @Injectable()
 export class DataService {

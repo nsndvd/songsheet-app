@@ -4,7 +4,7 @@ import * as moment from 'moment';
 import { Song } from '../../../ts/song';
 import { DATABASES, BROWSERTYPES } from '../../../ts/databases';
 import { Songgroup } from '../../../ts/songgroup';
-import { DataService } from '../../services/data/data.service';
+import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-song-event-form',
