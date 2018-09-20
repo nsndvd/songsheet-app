@@ -4,40 +4,48 @@
             <mat-dialog-content>
                 <form>
                     <mat-form-field>
-                        <input matInput name="name" id="name" 
+                        <input matInput 
+                            id="name" 
+                            name="name" 
                             placeholder="Title"
                             required
-                            autofill="false"
-                            [(ngModel)]="song.name"
+                            autocomplete="off"
+                            [(ngModel)]="song.title"
                         >
                     </mat-form-field>
         
                     <mat-form-field>
-                        <input matInput name="artist" id="artist" 
+                        <input matInput 
+                            name="artist" 
+                            id="artist" 
                             placeholder="Artist" 
                             [(ngModel)]="song.artist"
-                            autofill="false"
+                            autocomplete="off"
                         >
                     </mat-form-field>
         
                     <mat-form-field>
-                        <input matInput type="number" name="bpm" id="bpm" 
+                        <input matInput 
+                            id="bpm" 
+                            type="number" 
+                            name="bpm" 
                             placeholder="BPM" min="40" max="240"
                             [value]="song.bpm"
                             (input)="song.bpm = $event.target.value"
-                            autofill="false"
+                            autocomplete="off"
                         >
                     </mat-form-field>                       
         
                     <mat-form-field>
-                        <input matInput name="books" id="books" 
+                        <input matInput 
+                            id="books" 
+                            name="books" 
                             placeholder="Books" 
                             [(ngModel)]="songBooksStr"
-                            autofill="false"
+                            autocomplete="off"
                         >
                         <mat-hint>Separate each book with ';'</mat-hint>
-                    </mat-form-field>                       
-                    
+                    </mat-form-field>
                 </form>
             </mat-dialog-content>
             <div mat-dialog-actions>
@@ -51,45 +59,57 @@
                 <form>
                     <mat-form-field>
                         <input matInput 
-                            name="name" id="name" 
+                            id="name" 
+                            name="name" 
                             placeholder="Name" 
                             required 
-                            autofill="false"
+                            autocomplete="off"
                             [(ngModel)]="songgroup.name"             
                         >
                     </mat-form-field>
                     <mat-form-field>
-                        <input matInput name="description" id="description" 
+                        <input matInput 
+                            name="description" 
+                            id="description" 
                             placeholder="Description" 
                             [(ngModel)]="songgroup.description"                           
                         >
                     </mat-form-field>
                     <mat-form-field>
-                        <input matInput type="datetime-local" name="date" id="date" 
-                            placeholder="Date" 
-                            (focus)="changeDateFormat($event.target)" 
-                            (blur)="changeDateFormat($event.target)" 
-                            [(ngModel)]="songgroupDate"
+                        <input matInput 
+                            type="datetime-local" 
+                            name="date" 
+                            id="date" 
+                            placeholder="Date"
+                            [(ngModel)]="songgroup.date"
                         >
                     </mat-form-field>
-                        <div *ngFor="let songUUID of songgroupSongBuffer; let i = index">
-                            <span class="songselector-label"><label for="song{{ i+1 }}">{{ i+1 }}.</label></span>
-                            <!-- if songs selectable-->
-                            <mat-form-field class="songselection-input">
-                                <input matInput type="text" [formControl]="songSelect" [matAutocomplete]="songselection" [disabled]="songs.length === 0">
-                                <mat-autocomplete #songselection="matAutocomplete">
-                                    <option *ngFor="let s of songs" [value]="s">{{ s.title }}</option>
-                                </mat-autocomplete>
-                            </mat-form-field>
+                    <form [formGroup]="songsForm">
+                        <div formArrayName="songsArray">
+                            <div *ngFor="let scontrol of getControls(); let i = index">
+                                <span class="songselector-label"><label for="song{{ i+1 }}">{{ i+1 }}.</label></span>
+                                <!-- if songs selectable-->
+                                <mat-form-field class="songselection-input" [formGroupName]="i" floatLabel="never">
+                                    <input matInput type="text"
+                                        formControlName="songSelect"
+                                        [value]="songUUID"
+                                        [matAutocomplete]="songselection"
+                                        placeholder="Select a song"
+                                        [attr.disabled]="songs.length === 0">
+                                    <mat-autocomplete #songselection="matAutocomplete" [displayWith]="showSong">
+                                        <mat-option *ngFor="let s of songs" [value]="s">{{ s.title }}</mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </div>
+                            <button mat-flat-button (click)="addSongField($event)" class="half_button">+</button>
+                            <button mat-flat-button (click)="removeSongField($event)" class="half_button">-</button>
                         </div>
-                        <label for="songs">Songs</label>
-                        <button mat-flat-button (click)="addSongField($event)" class="half_button">+</button>
-                        <button mat-flat-button (click)="removeSongField($event)" class="half_button">-</button>
+                    </form>
                 </form>
             </mat-dialog-content>
             <div mat-dialog-actions>
                 <button mat-button (click)="onNoClick()">No Thanks</button>
-                <button mat-button [mat-dialog-close]="songgroup" cdkFocusInitial>Save</button>
+                <button mat-button (click)="onSave()" cdkFocusInitial>Save</button>
             </div>
         </span>
     </span>

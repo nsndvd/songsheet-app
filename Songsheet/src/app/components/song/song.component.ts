@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { Song } from '../../../ts/song';
+import { Song } from '../../models/song';
 import { DataService } from '../../services/data.service';
-import { DATABASES } from '../../../ts/databases';
+import { DATABASES } from '../../models/databases';
 
 @Component({
   selector: 'app-song',
@@ -18,6 +18,7 @@ export class SongComponent implements OnInit {
   constructor(private dataService: DataService) { }
 
   ngOnInit() {
+    console.log(this.song);
   }
 
   emitEditMeta(song){

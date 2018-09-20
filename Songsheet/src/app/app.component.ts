@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { DATABASES } from '../ts/databases';
+import { DATABASES } from './models/databases';
 import { DataService } from './services/data.service';
 import { Router } from '@angular/router';
 import { MenuItem } from './models/menuitem';

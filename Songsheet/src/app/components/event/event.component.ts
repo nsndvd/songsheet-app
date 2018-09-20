@@ -1,8 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { Songgroup } from '../../../ts/songgroup';
+import { Songgroup } from '../../models/songgroup';
 import { DataService } from '../../services/data.service';
-import { DATABASES } from '../../../ts/databases';
-import * as q from 'q';
+import { DATABASES } from '../../models/databases';
 
 @Component({
   selector: 'app-event',
@@ -21,8 +20,8 @@ export class EventComponent implements OnInit {
   songs: string[] = [];
 
   ngOnInit() { 
-    if(!this.event.getSongs){
-      this.event = new Songgroup(this.event);
+    if(!this.event.songs){
+      this.event = new Songgroup();
     }
     this.setSongs();
   }
@@ -37,10 +36,10 @@ export class EventComponent implements OnInit {
   }
 
   setSongs(){
-    this.event.getSongs().forEach( uuid => {
+    this.event.songs.forEach( uuid => {
       this.dataService.getByKey(DATABASES.songs, uuid).then(res => {
         if(res)
-          this.songs.push(res.name);
+          this.songs.push(res.title);
       });
     });
   }

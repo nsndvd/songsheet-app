@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
-import { DATABASES } from '../../../ts/databases';
 
 @Component({
   selector: 'app-settings',

@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import * as moment from 'moment';
 
-import { Song } from '../../../ts/song';
-import { DATABASES, BROWSERTYPES } from '../../../ts/databases';
-import { Songgroup } from '../../../ts/songgroup';
-import { Observable } from 'rxjs/Observable';
+import { Song } from '../../models/song';
+import { DATABASES } from '../../models/databases';
+import { Songgroup } from '../../models/songgroup';
 import { DataService } from '../../services/data.service';
 import { MatDialog } from '@angular/material';
 import { SongEventFormComponent } from '../song-event-form/song-event-form.component';
@@ -64,7 +62,8 @@ export class BrowserComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed', result);
+      if(result)
+        this.dataService.upsert(this.type, result);
     });
   }
 
