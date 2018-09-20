@@ -12,7 +12,7 @@ import * as q from 'q';
 export class EventComponent implements OnInit {
 
   @Input() event: Songgroup;
-  @Output() editID: EventEmitter<any> = new EventEmitter();
+  @Output() editMeta: EventEmitter<any> = new EventEmitter();
   @Output() deleted: EventEmitter<any> = new EventEmitter();
   JSON = JSON;
 
@@ -27,8 +27,8 @@ export class EventComponent implements OnInit {
     this.setSongs();
   }
 
-  editMeta(id){
-    this.editID.emit(id);
+  emitEditMeta(songgroup){
+    this.editMeta.emit(songgroup);
   }
 
   delete(id){

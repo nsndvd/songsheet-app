@@ -10,12 +10,10 @@
     <div id="songs">
 
         <span *ngSwitchCase="'songs'">
-            <app-song *ngFor="let song of song_elems" [song]="song" (editID)="showAddForm($event)" (deleted)="updateElems()"></app-song>
+            <app-song *ngFor="let song of song_elems" [song]="song" (editMeta)="showAddForm(song)" (delete)="updateElems()"></app-song>
         </span>
         <span *ngSwitchCase="'events'">
-            <app-event *ngFor="let event of songgroup_elems" [event]="event" (editID)="showAddForm($event)" (deleted)="updateElems()"></app-event>
+            <app-event *ngFor="let event of songgroup_elems" [event]="event" (editMeta)="showAddForm(event)" (delete)="updateElems()"></app-event>
         </span>
     </div>
-
-    <app-song-event-form *ngIf="displayAddForm" [display]="[type, editID]" (displayOut)=" updateElems(); displayAddForm = $event.display; type = $event.type; editID = $event.id;"></app-song-event-form>
 </div>

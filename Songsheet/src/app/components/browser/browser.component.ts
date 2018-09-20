@@ -7,6 +7,8 @@ import { DATABASES, BROWSERTYPES } from '../../../ts/databases';
 import { Songgroup } from '../../../ts/songgroup';
 import { Observable } from 'rxjs/Observable';
 import { DataService } from '../../services/data.service';
+import { MatDialog } from '@angular/material';
+import { SongEventFormComponent } from '../song-event-form/song-event-form.component';
 
 @Component({
   selector: 'app-browser',
@@ -18,8 +20,6 @@ export class BrowserComponent implements OnInit {
   type: DATABASES;
   headline: string;
   search_text: string;
-  displayAddForm: boolean = false;
-  editID = null;
   searchInput:string = '';
   
   song_view: object = {
@@ -33,7 +33,11 @@ export class BrowserComponent implements OnInit {
   song_elems: Song[] = [];
   songgroup_elems: Songgroup[] = [];
 
-  constructor(private route: ActivatedRoute, private dataService: DataService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private dataService: DataService,
+    private dialog: MatDialog
+  ) { }
   
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -53,9 +57,15 @@ export class BrowserComponent implements OnInit {
     });
   }
 
-  showAddForm(e){
-    this.editID = e;
-    this.displayAddForm = true;
+  showAddForm(data){
+    const dialogRef = this.dialog.open(SongEventFormComponent, {
+      width: '500px',
+      data: {object: data}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed', result);
+    });
   }
 
   updateElems(){

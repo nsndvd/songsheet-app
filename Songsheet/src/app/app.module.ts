@@ -1,8 +1,9 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSidenavModule, MatButtonModule, MatInputModule, MatCardModule } from '@angular/material';
+import { MatSidenavModule, MatButtonModule, MatInputModule, MatCardModule, MatDialogModule } from '@angular/material';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatIconModule } from '@angular/material/icon';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -32,8 +33,8 @@ import { SafePipe } from './pipes/safe.pipe';
     EditorComponent,
     SongComponent,
     EventComponent,
-    SongEventFormComponent,
     ColorComponent,
+    SongEventFormComponent,
     IconsComponent,
     SafePipe,
     PreviewComponent
@@ -47,12 +48,18 @@ import { SafePipe } from './pipes/safe.pipe';
     MatButtonModule,
     MatInputModule,
     MatIconModule,
-    MatCardModule
+    MatCardModule,
+    MatDialogModule,
+    ReactiveFormsModule,
+    MatAutocompleteModule
   ],
   providers: [
     DataService,
     ParserService,
     HtmlFactoryService
+  ],
+  entryComponents: [
+    SongEventFormComponent,
   ],
   bootstrap: [AppComponent]
 })

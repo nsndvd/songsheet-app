@@ -1,10 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, Inject } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import * as moment from 'moment';
 
-import { Song } from '../../../ts/song';
+import { Song } from '../../models/song';
 import { DATABASES, BROWSERTYPES } from '../../../ts/databases';
 import { Songgroup } from '../../../ts/songgroup';
 import { DataService } from '../../services/data.service';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'app-song-event-form',
@@ -13,18 +15,10 @@ import { DataService } from '../../services/data.service';
 })
 export class SongEventFormComponent implements OnInit {
 
-  @Input() 
-  set display([type, id]){
-    this.initValues();
-    this.type = <DATABASES> type;
-    if(id){
-      this.id = String(id);
-    }
-  };
-  @Output() displayOut: EventEmitter<any> = new EventEmitter();
   @ViewChild('form_event', {read: ElementRef}) form: ElementRef;
 
-  displayBool: boolean = true;
+  songSelect = new FormControl();
+
   type: DATABASES;
   id: string;
   songscounter: number[] = [1];  
@@ -37,9 +31,22 @@ export class SongEventFormComponent implements OnInit {
   songgroupDate: string = '';
   songgroupSongBuffer: string[];
 
-  constructor(private dataService: DataService) { }
+  constructor(
+    private dataService: DataService,
+    private dialogRef: MatDialogRef<SongEventFormComponent>,
+    @Inject(MAT_DIALOG_DATA) public data
+  ) {
+  }
+
+  onNoClick():void{
+    this.dialogRef.close();
+  }
 
   ngOnInit() {
+    if(this.data.object.artist)
+      this.type = DATABASES.songs;
+    else
+      this.type = DATABASES.events;
     this.initValues();
    }
 
@@ -66,14 +73,7 @@ export class SongEventFormComponent implements OnInit {
   }
 
   closeAddForm(){
-    this.displayBool = false;
     this.songgroupDate = this.songgroup.getDate();
-
-    this.displayOut.emit({
-      display: this.displayBool, 
-      type: this.type, 
-      id: this.id
-    });
   }
 
   changeDateFormat(that){
@@ -136,7 +136,7 @@ export class SongEventFormComponent implements OnInit {
       this.dataService.getByKey(this.type, this.id).then( elem => {
         switch(this.type){
           case DATABASES.songs:
-            this.song = new Song(elem);
+            this.song = new Song();
             this.songBooksStr = this.song.books ? this.song.books.join('; ') : '';
             break;
             
