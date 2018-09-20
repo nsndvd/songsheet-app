@@ -8,7 +8,17 @@
     color: $grey;
     cursor: pointer;
 }
-.songselector{
-    width: 80%;
-    margin-left: 30px;
+.songselector-label{
+    display: inline-block;
+    width: 45px;
+}
+.songselection-input{
+    width: calc(100% - 50px);
+}
+mat-form-field{
+    width: 100%;
+    margin: 0 auto;
+}
+.mat-dialog-actions{
+    float: right;
 }

@@ -1,10 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
-import * as moment from 'moment';
+import { Component, OnInit, Inject } from '@angular/core';
+import { FormControl, FormGroup, FormArray } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
-import { Song } from '../../../ts/song';
-import { DATABASES, BROWSERTYPES } from '../../../ts/databases';
-import { Songgroup } from '../../../ts/songgroup';
 import { DataService } from '../../services/data.service';
+
+import { Song } from '../../models/song';
+import { DATABASES } from '../../models/databases';
+import { Songgroup } from '../../models/songgroup';
 
 @Component({
   selector: 'app-song-event-form',
@@ -13,144 +15,117 @@ import { DataService } from '../../services/data.service';
 })
 export class SongEventFormComponent implements OnInit {
 
-  @Input() 
-  set display([type, id]){
-    this.initValues();
-    this.type = <DATABASES> type;
-    if(id){
-      this.id = String(id);
-    }
-  };
-  @Output() displayOut: EventEmitter<any> = new EventEmitter();
-  @ViewChild('form_event', {read: ElementRef}) form: ElementRef;
-
-  displayBool: boolean = true;
+  songsForm: FormGroup;
+  songsArray: FormArray = new FormArray([]);
   type: DATABASES;
   id: string;
   songscounter: number[] = [1];  
   songs: Song[] = [];
   
-  song: Song = new Song();
+  song: Song;
   songBooksStr: string = '';
 
   songgroup: Songgroup = new Songgroup();
-  songgroupDate: string = '';
-  songgroupSongBuffer: string[];
+  songUUID: string;
 
-  constructor(private dataService: DataService) { }
+  constructor(
+    private dataService: DataService,
+    private dialogRef: MatDialogRef<SongEventFormComponent>,
+    @Inject(MAT_DIALOG_DATA) public data
+  ) {
+  }
+
+  onNoClick():void{
+    switch(this.type){
+      case DATABASES.songs:
+        this.dialogRef.close();
+        break;
+      case DATABASES.events:
+        this.dialogRef.close();
+        break;
+    }
+  }
+
+  onSave():void{
+    switch(this.type){
+      case DATABASES.songs:
+        this.dialogRef.close(this.song);
+        break;
+      case DATABASES.events:
+        this.songgroup.songs = [];
+        for(let control of this.songsArray.controls){
+          console.log(control.value.songSelect);
+          if(control.value.songSelect){
+            console.log(control.value.id);
+            this.songgroup.songs.push(control.value.songSelect.id);
+          }
+        }
+        console.log(this.songgroup);
+        this.dialogRef.close(this.songgroup);
+        break;
+    }
+  }
 
   ngOnInit() {
+    if(!this.data.object.songs)
+      this.type = DATABASES.songs;
+    else{
+      this.type = DATABASES.events;
+      this.songsForm = new FormGroup({
+        songsArray: this.songsArray
+      });
+    }
+
     this.initValues();
    }
 
   ngAfterViewChecked(){
-    this.updateSelectSongs();
   }
 
-  setSong(model){
-    let song = Number(model.name[model.name.length-1]) - 1;
-    let songUUID = model.value;
-    this.songgroupSongBuffer[song] = songUUID;
-    this.updateSelectSongs();
+  getControls(){
+    return (<FormArray>this.songsForm.get('songsArray')).controls;
   }
 
-  updateSelectSongs(){
-    if(this.form){
-      this.songgroupSongBuffer.forEach( (uuid, i) => {
-        let dom = this.form.nativeElement.querySelector('#song'+(i+1)+' [value="'+uuid+'"]') as HTMLSelectElement;
-        if(dom) {
-          dom.selected = true;
-        }
-      });
-    }
+  addSongField(value?:Song){
+    (<FormArray>this.songsForm.get('songsArray')).push(
+      new FormGroup({
+        songSelect: new FormControl(value)
+      })
+    );
+    console.log(this.songs);
   }
 
-  closeAddForm(){
-    this.displayBool = false;
-    this.songgroupDate = this.songgroup.getDate();
-
-    this.displayOut.emit({
-      display: this.displayBool, 
-      type: this.type, 
-      id: this.id
-    });
+  removeSongField(){
+    this.songsArray.removeAt(this.songsArray.length - 1);
   }
 
-  changeDateFormat(that){
-    let val;
-    switch(that.type){
-      case 'date':
-        val = moment(that.value);
-        that.type = 'text';
-        that.value = !val.isValid() ? '' : val.locale('de').format('L');
-        break;
-      case 'text':
-        val = moment(that.value, 'DD.MM.YYYY');
-        that.type = 'date';
-        that.value = !val.isValid() ? '' : val.format('YYYY-MM-DD');
-        break;
-    }
-  }
-
-  submitSong(e){
-    e.preventDefault();
-    this.song.books = this.songBooksStr.split(';');
-    // remove last book if input terminates with ';'
-    if (this.song.books[this.song.books.length - 1] === ''){
-      this.song.books.pop();
-    }
-
-    this.dataService.upsert(DATABASES.songs, this.song);
-    this.closeAddForm();    
-  }
-
-  submitEvent(e){
-    e.preventDefault();
-    this.songgroup.setDate(this.songgroupDate);
-    //remove empty songs from buffer
-    this.songgroup.setSongs(this.songgroupSongBuffer);
-
-    this.dataService.upsert(DATABASES.events, this.songgroup);
-    this.closeAddForm();
-  }
-
-  addSongField(e){
-    e.preventDefault();
-    this.songgroupSongBuffer.push('');
-  }
-
-  removeSongField(e){
-    e.preventDefault();
-    if(this.songgroupSongBuffer.length > 1){
-      this.songgroupSongBuffer.pop();
-    }
+  showSong(song?: Song){
+    return song ? song.title : undefined;
   }
 
   initValues(){
     this.dataService.getAll(DATABASES.songs).then( songs => {
       this.songs = songs;
+      
+      // init song/event if editMeta is called
+      switch(this.type){
+        case DATABASES.songs:
+          this.song = this.data.object;
+          this.songBooksStr = this.song.books ? this.song.books.join('; ') : '';
+          break;
+          
+        case DATABASES.events:
+          this.songgroup = this.data.object;
+          for (let song of this.songgroup.songs){
+            this.addSongField(
+              this.songs.find((val, id, obj) => {
+                return val.id === song;
+              })
+            );
+          }
+          break;
+      }
     })
 
-    // init song/event if editMeta is called
-    if(this.id){
-      this.dataService.getByKey(this.type, this.id).then( elem => {
-        switch(this.type){
-          case DATABASES.songs:
-            this.song = new Song(elem);
-            this.songBooksStr = this.song.books ? this.song.books.join('; ') : '';
-            break;
-            
-          case DATABASES.events:
-            this.songgroup = new Songgroup(elem);
-            this.songgroupDate = this.songgroup.getDate();
-            this.songgroupSongBuffer = this.songgroup.getSongs().concat(['']);
-            break;
-          }
-      });
-    } else {
-      this.songgroupSongBuffer = [''];
-    }
-
   }
-
 }

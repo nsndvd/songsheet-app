@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { Song } from '../../../ts/song';
+import { Song } from '../../models/song';
 import { DataService } from '../../services/data.service';
-import { DATABASES } from '../../../ts/databases';
+import { DATABASES } from '../../models/databases';
 
 @Component({
   selector: 'app-song',
@@ -12,21 +12,22 @@ import { DATABASES } from '../../../ts/databases';
 export class SongComponent implements OnInit {
 
   @Input() song: Song;
-  @Output() editID: EventEmitter<any> = new EventEmitter();
-  @Output() deleted: EventEmitter<any> = new EventEmitter();
+  @Output() editMeta: EventEmitter<any> = new EventEmitter();
+  @Output() delete: EventEmitter<any> = new EventEmitter();
 
   constructor(private dataService: DataService) { }
 
   ngOnInit() {
+    console.log(this.song);
   }
 
-  editMeta(id){
-    this.editID.emit(id);
+  emitEditMeta(song){
+    this.editMeta.emit(song);
   }
 
-  delete(id){
+  del(id){
     this.dataService.delete(DATABASES.songs, id);
-    this.deleted.emit();
+    this.delete.emit();
   }
 
 }

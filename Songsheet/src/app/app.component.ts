@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 
-import { DATABASES } from '../ts/databases';
+import { DATABASES } from './models/databases';
 import { DataService } from './services/data.service';
 import { Router } from '@angular/router';
+import { MenuItem } from './models/menuitem';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +11,25 @@ import { Router } from '@angular/router';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+
+  menu: MenuItem[] = [
+    {
+      route: 'browser/songs',
+      label: 'So',
+    },
+    {
+      route: 'browser/events',
+      label: 'Ev',
+    },
+    {
+      route: 'editor',
+      label: 'Ed'
+    },
+    {
+      route: 'settings',
+      label: 'Se'
+    }
+  ]
 
   constructor(private DataService: DataService, private router: Router){ }
 

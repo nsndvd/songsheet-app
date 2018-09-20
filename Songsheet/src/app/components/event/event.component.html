@@ -1,19 +1,23 @@
-<div class="event_title">
-    {{ event.name }}
-    <div class="mods">
-        <i class="icon">edit</i>
-        <i class="icon" (click)="editMeta( event.id )">settings</i>
-        <i class="icon" (click)="delete( event.id )">delete</i>
-    </div>
-</div>
-<div class="event_preview">{{ event.description }}</div>
-<table class="event_attr">
-    <tr>
-        <th>Songs</th>
-        <td>
-            <ul>
-                <li *ngFor="let s of songs">{{ s }}</li>
-            </ul>
-        </td>
-    </tr>
-</table>
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>{{ event.name }}</mat-card-title>
+        <div class="mods">
+            <i class="icon">edit</i>
+            <i class="icon" (click)="emitEditMeta( event )">settings</i>
+            <i class="icon" (click)="delete( event )">delete</i>
+        </div>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="event_preview">{{ event.description }}</div>
+        <table class="event_attr">
+            <tr>
+                <th>Songs</th>
+                <td>
+                    <ul>
+                        <li *ngFor="let s of songs">{{ s }}</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </mat-card-content>
+</mat-card>

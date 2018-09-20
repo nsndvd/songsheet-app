@@ -1,25 +1,30 @@
-<div class="song_title">{{ song.name }}<br>
-    <span class="song_artist">{{ song.artist }}</span>
-    <div class="mods">
-        <i class="icon">edit</i>
-        <i class="icon" (click)="editMeta( song.id )">settings</i>
-        <i class="icon" (click)="delete( song.id )">delete</i>
-    </div>
-</div>
-<div class="song_preview">{{ song.getPreview() }}</div>
-<table class="song_attr">
-    <tr>
-        <th class="icon-bpm"></th>
-        <td>
-            {{ song.getBPM() }}
-        </td>
-    </tr>
-    <tr>
-        <th class="icon-books"></th>
-        <td>
-            <ul>
-                <li *ngFor="let book of song.books">{{ book }}</li>
-            </ul>
-        </td>
-    </tr>
-</table>
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>{{ song.title }}</mat-card-title>
+        <mat-card-subtitle>{{ song.artist }}</mat-card-subtitle>
+        <div class="mods">
+            <i class="icon">edit</i>
+            <i class="icon" (click)="emitEditMeta( song )">settings</i>
+            <i class="icon" (click)="del( song )">delete</i>
+        </div>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="song">{{ song.preview }}</div>
+        <table class="song_attr">
+            <tr>
+                <th class="icon-bpm"></th>
+                <td>
+                    {{ song.bpm }}
+                </td>
+            </tr>
+            <tr>
+                <th class="icon-books"></th>
+                <td>
+                    <ul>
+                        <li *ngFor="let book of song.books">{{ book }}</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </mat-card-content>
+</mat-card>

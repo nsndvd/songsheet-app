@@ -1,23 +1,31 @@
 @import '../../../assets/icons';
 @import '../../../assets/colors';
 
-.song_title{
-    background: $grey;
-    padding: 20px;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 70px;
-    left: 0;
-    box-sizing: border-box;
-    text-decoration: none;
-    font-weight: bold;
-    color: $black;
+mat-card{
+    min-width: 200px;
+    width: calc(100% / 5);
+    height: 300px;
+    padding: 0;
+    display: inline-block;
+    margin: 10px;
 }
-.song_artist{
-    font-size: 0.7em;
-    font-weight: normal;
+
+mat-card-header{
+    background: $pastel-blue;
+    padding: 24px;
+    height: 24px;
+
+    mat-card-title{
+        font-size: 1.2em;
+        margin-bottom: 10px;
+    }
 }
+
+mat-card-content{
+    background: $white;
+    padding: 24px;
+}
+
 .song_attr{
     width: 100%;
 }
@@ -40,12 +48,11 @@
         }
     }
 } 
-.song_title:hover .mods{
+mat-card:hover .mods{
     display: inline-block !important;
 }
 .mods{
     display: none;
     position: absolute;
     right: 10px;
-    top: calc(70% - 25px);
 }

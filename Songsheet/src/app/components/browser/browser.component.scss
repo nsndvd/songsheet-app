@@ -1,28 +1,5 @@
 @import '../../../assets/icons';
-
-.songselector_label{
-    width: 19%;
-    display: inline-block;
-    padding: 10px;
-    box-sizing: border-box;
-    text-align: right;
-}
-
-.songselector {
-    width: 80%;
-}
-
-.prev_box{
-    position: relative;
-    background: $pastel-blue;
-    padding: 90px 20px 20px 20px;
-    margin: 20px;
-    width: calc(25% - 40px);
-    height: 250px;
-    box-sizing: border-box;
-    display: inline-block;
-    min-width: 250px;
-}
-.prev_box:hover{
-    background: $orange;
+mat-form-field{
+    min-width: 300px;
+    width: 50%;
 }

@@ -1,15 +1,19 @@
 
 <div id="browser_content" class="content" [ngSwitch]="type">
     <h3>{{ headline }}<i class="icon" (click)="showAddForm()">add_box</i></h3>
+    <mat-form-field floatLabel="never">
+        <input matInput id="search" [placeholder]="search_text" [(ngModel)]="searchInput" autofill="false">
+        <button mat-button *ngIf="searchInput" matSuffix mat-icon-button aria-label="Clear" (click)="searchInput=''">
+            <i mat-icon-button class="icon">close</i>
+        </button>
+    </mat-form-field>
     <div id="songs">
-        <input id="search" [placeholder]="search_text" oninput="search(this)">
+
         <span *ngSwitchCase="'songs'">
-            <app-song *ngFor="let song of song_elems" [song]="song" class="prev_box" (editID)="showAddForm($event)" (deleted)="updateElems()"></app-song>
+            <app-song *ngFor="let song of song_elems" [song]="song" (editMeta)="showAddForm(song)" (delete)="updateElems()"></app-song>
         </span>
         <span *ngSwitchCase="'events'">
-            <app-event *ngFor="let event of songgroup_elems" [event]="event" class="prev_box" (editID)="showAddForm($event)" (deleted)="updateElems()"></app-event>
+            <app-event *ngFor="let event of songgroup_elems" [event]="event" (editMeta)="showAddForm(event)" (delete)="updateElems()"></app-event>
         </span>
     </div>
-
-    <app-song-event-form *ngIf="displayAddForm" [display]="[type, editID]" (displayOut)=" updateElems(); displayAddForm = $event.display; type = $event.type; editID = $event.id;"></app-song-event-form>
 </div>

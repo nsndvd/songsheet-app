@@ -1,99 +1,115 @@
-<div class="popup">
-    <div class="popup_content">
-        <i class="closeCross icon" (click)="closeAddForm()">close</i>
-        <span [ngSwitch]="type">
-            <span *ngSwitchCase="'songs'">
+
+    <span [ngSwitch]="type">
+        <span *ngSwitchCase="'songs'">
+            <mat-dialog-content>
                 <form>
-                    <label for="name">Title</label>
-                    <input type="text" name="name" id="name" 
-                        placeholder="Title*" 
-                        required 
-                        ngModel
-                        [(ngModel)]="song.name"
-                        #title="ngModel"
-                    >
-                    <div class="error" *ngIf="title.touched && !title.valid">A song has to have a name.</div>
-
-                    <label for="name">Artist</label>
-                    <input type="text" name="artist" id="artist" 
-                        placeholder="Artist" 
-                        [(ngModel)]="song.artist"
-                    >
-
-                    <label for="name">BPM</label>                        
-                    <input type="number" name="bpm" id="bpm" 
-                        placeholder="BPM" min="40" max="240"
-                        [value]="song.getBPM()" 
-                        (input)="song.setBPM($event.target.value)"
-                    >
-
-                    <label for="name">Books</label>                        
-                    <input type="text" name="books" id="books" 
-                        placeholder="Books" 
-                        [(ngModel)]="songBooksStr"
-                    >
-                    <div class="description">Separate each book with ';'</div>
-                    
-                    <button type="submit" (click)="submitSong($event)">Save song</button>
-                </form>
-            </span>
-
-            <span *ngSwitchCase="'events'">
-                <form #form_event>
-                    <label for="name">Name</label>
-                    <input type="text" name="name" id="name" 
-                        placeholder="Name*" 
-                        required 
-                        [(ngModel)]="songgroup.name"
-                        ngModel
-                        #eventName="ngModel"                  
-                    >
-                    <div class="error" *ngIf="eventName.touched && !eventName.valid">An Event has to have a name.</div>
-
-                    <label for="description">Description</label>
-                    <input type="text" name="description" id="description" 
-                        placeholder="Description" 
-                        [(ngModel)]="songgroup.description"                           
-                    >
-
-                    <label for="date">Date</label>
-                    <input type="text" name="date" id="date" 
-                        placeholder="Date" 
-                        (focus)="changeDateFormat($event.target)" 
-                        (blur)="changeDateFormat($event.target)" 
-                        [(ngModel)]="songgroupDate"
-                    >
-
-                    <label for="songs">Songs</label>
-                    <div *ngFor="let songUUID of songgroupSongBuffer; let i = index">
-                        <span class="songselector_label"><label for="song{{ i+1 }}">{{ i+1 }}.</label></span>
-                        <!-- if songs selectable-->
-                        <select name="song{{ i+1 }}" id="song{{ i+1 }}"
-                            *ngIf="songs.length > 0"
-                            class="songselector" 
-                            list="songlist"
-                            (change)="setSong(song)"
-                            ngModel
-                            #song="ngModel"
+                    <mat-form-field>
+                        <input matInput 
+                            id="name" 
+                            name="name" 
+                            placeholder="Title"
+                            required
+                            autocomplete="off"
+                            [(ngModel)]="song.title"
                         >
-                            <option value="" disabled>Choose a song</option>
-                            <option *ngFor="let s of songs" value="{{s.id}}">{{ s.name }}</option>
-                        </select>
-                       
-                        <!-- else -->
-                        <input type="text" name="song{{ i+1 }}" id="song{{ i+1 }}" 
-                            *ngIf="songs.length === 0"    
-                            class="songselector" 
-                            placeholder="No songs available" 
-                            disabled
+                    </mat-form-field>
+        
+                    <mat-form-field>
+                        <input matInput 
+                            name="artist" 
+                            id="artist" 
+                            placeholder="Artist" 
+                            [(ngModel)]="song.artist"
+                            autocomplete="off"
                         >
-                    </div>
-                    <button (click)="addSongField($event)" class="half_button">+</button>
-                    <button (click)="removeSongField($event)" class="half_button">-</button>
-
-                    <button type="submit" (click)="submitEvent($event)">Save event</button>
+                    </mat-form-field>
+        
+                    <mat-form-field>
+                        <input matInput 
+                            id="bpm" 
+                            type="number" 
+                            name="bpm" 
+                            placeholder="BPM" min="40" max="240"
+                            [value]="song.bpm"
+                            (input)="song.bpm = $event.target.value"
+                            autocomplete="off"
+                        >
+                    </mat-form-field>                       
+        
+                    <mat-form-field>
+                        <input matInput 
+                            id="books" 
+                            name="books" 
+                            placeholder="Books" 
+                            [(ngModel)]="songBooksStr"
+                            autocomplete="off"
+                        >
+                        <mat-hint>Separate each book with ';'</mat-hint>
+                    </mat-form-field>
                 </form>
-            </span>
+            </mat-dialog-content>
+            <div mat-dialog-actions>
+                <button mat-button (click)="onNoClick()">No Thanks</button>
+                <button mat-button [mat-dialog-close]="song" cdkFocusInitial>Save</button>
+            </div>
         </span>
-    </div>
-</div>
+    
+        <span *ngSwitchCase="'events'">
+            <mat-dialog-content>
+                <form>
+                    <mat-form-field>
+                        <input matInput 
+                            id="name" 
+                            name="name" 
+                            placeholder="Name" 
+                            required 
+                            autocomplete="off"
+                            [(ngModel)]="songgroup.name"             
+                        >
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input matInput 
+                            name="description" 
+                            id="description" 
+                            placeholder="Description" 
+                            [(ngModel)]="songgroup.description"                           
+                        >
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input matInput 
+                            type="datetime-local" 
+                            name="date" 
+                            id="date" 
+                            placeholder="Date"
+                            [(ngModel)]="songgroup.date"
+                        >
+                    </mat-form-field>
+                    <form [formGroup]="songsForm">
+                        <div formArrayName="songsArray">
+                            <div *ngFor="let scontrol of getControls(); let i = index">
+                                <span class="songselector-label"><label for="song{{ i+1 }}">{{ i+1 }}.</label></span>
+                                <!-- if songs selectable-->
+                                <mat-form-field class="songselection-input" [formGroupName]="i" floatLabel="never">
+                                    <input matInput type="text"
+                                        formControlName="songSelect"
+                                        [value]="songUUID"
+                                        [matAutocomplete]="songselection"
+                                        placeholder="Select a song"
+                                        [attr.disabled]="songs.length === 0">
+                                    <mat-autocomplete #songselection="matAutocomplete" [displayWith]="showSong">
+                                        <mat-option *ngFor="let s of songs" [value]="s">{{ s.title }}</mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </div>
+                            <button mat-flat-button (click)="addSongField($event)" class="half_button">+</button>
+                            <button mat-flat-button (click)="removeSongField($event)" class="half_button">-</button>
+                        </div>
+                    </form>
+                </form>
+            </mat-dialog-content>
+            <div mat-dialog-actions>
+                <button mat-button (click)="onNoClick()">No Thanks</button>
+                <button mat-button (click)="onSave()" cdkFocusInitial>Save</button>
+            </div>
+        </span>
+    </span>
