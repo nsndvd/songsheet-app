@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
+import { Stream } from 'stream';
+import { CreateOptions, create } from 'html-pdf';
 import { Song } from '../models/song';
 import { Block } from '../models/block';
 import { Line } from '../models/line';
 import { HtmlFactoryService } from './html-factory.service';
-//import * as wkhtml from 'wkhtmltopdf';
 
 @Injectable()
 export class ParserService {
@@ -15,13 +16,18 @@ export class ParserService {
     order: /\[(?:order\s*:\s*)([\w\s-_,]*)\]/gi,
     chord: /(?:\[\s*)([\w<>\*\#]*)(?:\s*\])/gi,
     invChord: /([\w\#]+)/gi
-  }
+  };
 
   constructor(private htmlFactory: HtmlFactoryService) { }
 
-  public obj2PDF( song:Song ){
+  public obj2PDF( song:Song,  opts: CreateOptions ): Promise<Stream>{
     const html = this.obj2HTML(song);
-    //wkhtml(html).pipe();
+    return new Promise<Stream>((resolve, reject) => {
+      create(html, opts).toStream((err, stream) => {
+        if(err) reject(err);
+        resolve(stream);
+      })
+    });
   }
 
   public obj2HTML( song: Song): string {
@@ -111,7 +117,7 @@ export class ParserService {
       newBlock.maxLineWidth = this._max(val.lyricsWidth, newBlock.maxLineWidth);
       newBlock.maxDiffAnnotationsPerRepition = this._max(val.differentAnnotations, newBlock.maxDiffAnnotationsPerRepition);
       newBlock.annotationCells = this._max(val.annotationCells, newBlock.annotationCells);
-    })
+    });
     return newBlock;
   }
 
