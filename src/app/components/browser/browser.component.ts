@@ -56,6 +56,9 @@ export class BrowserComponent implements OnInit {
   }
 
   showAddForm(data){
+    if (!data){
+      data = this.type === DATABASES.songs ? new Song() : new Songgroup();
+    }
     const dialogRef = this.dialog.open(SongEventFormComponent, {
       width: '500px',
       data: {object: data}

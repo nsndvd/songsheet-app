@@ -22,7 +22,7 @@ export class SongEventFormComponent implements OnInit {
   songscounter: number[] = [1];  
   songs: Song[] = [];
   
-  song: Song;
+  song: Song = new Song();
   songBooksStr: string = '';
 
   songgroup: Songgroup = new Songgroup();
@@ -32,7 +32,18 @@ export class SongEventFormComponent implements OnInit {
     private dataService: DataService,
     private dialogRef: MatDialogRef<SongEventFormComponent>,
     @Inject(MAT_DIALOG_DATA) public data
-  ) {
+  ) {}
+
+  ngOnInit() {
+    if(!this.data.object.songs)
+      this.type = DATABASES.songs;
+    else{
+      this.type = DATABASES.events;
+      this.songsForm = new FormGroup({
+        songsArray: this.songsArray
+      });
+    }
+    this.initValues();
   }
 
   onNoClick():void{
@@ -49,37 +60,25 @@ export class SongEventFormComponent implements OnInit {
   onSave():void{
     switch(this.type){
       case DATABASES.songs:
+        this.song.books = this.songBooksStr
+          .split(';')
+          .map(Function.prototype.call, String.prototype.trim)
+          .filter((val) => {
+            return /\w/g.test(val);
+          });
+        console.log(this.song);
         this.dialogRef.close(this.song);
         break;
       case DATABASES.events:
         this.songgroup.songs = [];
         for(let control of this.songsArray.controls){
-          console.log(control.value.songSelect);
           if(control.value.songSelect){
-            console.log(control.value.id);
             this.songgroup.songs.push(control.value.songSelect.id);
           }
         }
-        console.log(this.songgroup);
         this.dialogRef.close(this.songgroup);
         break;
     }
-  }
-
-  ngOnInit() {
-    if(!this.data.object.songs)
-      this.type = DATABASES.songs;
-    else{
-      this.type = DATABASES.events;
-      this.songsForm = new FormGroup({
-        songsArray: this.songsArray
-      });
-    }
-
-    this.initValues();
-   }
-
-  ngAfterViewChecked(){
   }
 
   getControls(){
