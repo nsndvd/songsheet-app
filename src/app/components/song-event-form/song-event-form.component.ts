@@ -62,11 +62,8 @@ export class SongEventFormComponent implements OnInit {
       case DATABASES.songs:
         this.song.books = this.songBooksStr
           .split(';')
-          .map(Function.prototype.call, String.prototype.trim)
-          .filter((val) => {
-            return /\w/g.test(val);
-          });
-        console.log(this.song);
+          .map(value => value.trim())
+          .filter(val => /\w/g.test(val));
         this.dialogRef.close(this.song);
         break;
       case DATABASES.events:
