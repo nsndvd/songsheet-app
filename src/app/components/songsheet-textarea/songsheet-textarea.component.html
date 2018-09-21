@@ -2,8 +2,8 @@
   <div id="line-numbers-wrapper">
     <div class="line-number" *ngFor="let l of linenumbers">{{ l }}</div>
   </div>
-  <div id="highlighted-text" [innerHTML]="highlightedText | safe: 'html'"></div>
+  <div id="highlighted-field" [innerHTML]="highlightedText | safe: 'html'"></div>
   <form [formGroup]="inputGroup">
-    <textarea id="edit-field" formControlName="inputControl"></textarea>
+    <textarea id="edit-field" autosize formControlName="inputControl"></textarea>
   </form>
 </div>

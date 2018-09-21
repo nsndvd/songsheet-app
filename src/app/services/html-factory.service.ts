@@ -11,6 +11,14 @@ export class HtmlFactoryService {
 
   constructor() { }
 
+  public highlightText(text:string):string{
+    let html:string = '<pre>';
+    for(let line of text.split('\n')){
+      html += this._markdown(line, true)+'</pre><br><pre>';
+    }
+    return html+'</pre>'+this._thinStyles();
+  }
+
   public song2html(song:Song): string {
     const title = song.title ? song.title : '';
     const artist = song.artist ? song.artist : '';
@@ -81,7 +89,7 @@ export class HtmlFactoryService {
     return html;
   }
 
-  private _markdown(str:string): string {
+  private _markdown(str:string, keepChars:boolean = false): string {
     if (!str)
       return '';
     let bold = false;
@@ -94,7 +102,7 @@ export class HtmlFactoryService {
 
     for(let id = 0; id < arr.length; id++) {
       const char = arr[id];
-      if (ignoreNext > 0){
+      if (ignoreNext > 0 && !keepChars){
         ignoreNext--;
         continue;
       }
@@ -135,10 +143,9 @@ export class HtmlFactoryService {
 
       //update
       if(update){
-        let closingTag = '';
-        if(firstStarted)
-          closingTag = '</pre>';
-        html += closingTag+'<pre class="'+this._getMarkdownClasses(bold, italic, colorStack)+'">';
+        const closingTag = firstStarted ? '</pre>' : '';
+        const letter = keepChars ? this._escapeHTML(char) : '';
+        html += closingTag+'<pre class="'+this._getMarkdownClasses(bold, italic, colorStack)+'">'+letter;
         firstStarted = true;
       }else{
         html += this._escapeHTML(char);
@@ -159,6 +166,7 @@ export class HtmlFactoryService {
         '=': '&#x3D;',
         '|': '&#124;'
     };
+    console.log(char, entityMap[char]);
     return entityMap[char] ? entityMap[char] : char;
   }
 
@@ -267,6 +275,30 @@ export class HtmlFactoryService {
         font-style: italic;
       }
       </style>`;
+  }
+
+  private _thinStyles(){
+    return `<style>
+    pre, pre pre{
+      display: inline-block;
+      margin: 0;
+    }
+    .red{
+      color: red;
+    }
+    .blue{
+      color: blue;
+    }
+    .green{
+      color: green;
+    }
+    .bold{
+      font-weight: bold;
+    }
+    .italic{
+      font-style: italic;
+    }
+    </style>`;
   }
 
 }

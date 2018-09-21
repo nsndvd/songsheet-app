@@ -1,5 +1,6 @@
-import { Component, OnInit, Renderer2, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { HtmlFactoryService } from '../../services/html-factory.service';
 
 @Component({
   selector: 'app-songsheet-textarea',
@@ -12,21 +13,20 @@ export class SongsheetTextareaComponent implements OnInit {
   highlightedText:string = '';
   linenumbers: number[] = [1];
 
-  constructor(private fb: FormBuilder, private renderer: Renderer2, private el: ElementRef) {
-    this.inputGroup = fb.group({
+  constructor(private fb: FormBuilder, private htmlFactory: HtmlFactoryService) {
+    this.inputGroup = this.fb.group({
       'inputControl': [null]
     });
   }
 
   ngOnInit() {
     this.inputGroup.get('inputControl').valueChanges.subscribe((v) => {
-      console.log(v);
-      this.update();
+      this.update(v);
     });
   }
 
-  update(){
-    this.renderer.setStyle(this.el.nativeElement, 'height', this.el.nativeElement.scrollHeight);
+  update(inputText:string){
+    this.highlightedText = this.htmlFactory.highlightText(inputText);
     this.updateNewLines();
   }
 

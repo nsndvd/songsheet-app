@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
+import { AutosizeModule } from 'ngx-autosize';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -54,7 +55,8 @@ import { SafePipe } from './pipes/safe.pipe';
     MatCardModule,
     MatDialogModule,
     ReactiveFormsModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    AutosizeModule
   ],
   providers: [
     DataService,
