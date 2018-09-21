@@ -1,0 +1,9 @@
+<div id="wrapper">
+  <div id="line-numbers-wrapper">
+    <div class="line-number" *ngFor="let l of linenumbers">{{ l }}</div>
+  </div>
+  <div id="highlighted-text" [innerHTML]="highlightedText | safe: 'html'"></div>
+  <form [formGroup]="inputGroup">
+    <textarea id="edit-field" formControlName="inputControl"></textarea>
+  </form>
+</div>

@@ -13,6 +13,7 @@ import { SongComponent } from './components/song/song.component';
 import { EventComponent } from './components/event/event.component';
 import { SongEventFormComponent } from './components/song-event-form/song-event-form.component';
 import { PreviewComponent } from './components/preview/preview.component';
+import { SongsheetTextareaComponent } from './components/songsheet-textarea/songsheet-textarea.component';
 
 import { BrowserComponent } from './views/browser/browser.component';
 import { SettingsComponent } from './views/settings/settings.component';
@@ -38,7 +39,8 @@ import { SafePipe } from './pipes/safe.pipe';
     SongEventFormComponent,
     IconsComponent,
     SafePipe,
-    PreviewComponent
+    PreviewComponent,
+    SongsheetTextareaComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,49 @@
+@import '../../../assets/fonts.scss';
+@import '../../../assets/colors.scss';
+
+#line-numbers-wrapper{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30px;
+  height: 100%;
+  background: $dark-grey;
+  color: $white;
+  padding-right: 10px;
+  float: right;
+  box-sizing: border-box;
+}
+.line-number{
+  text-align: right;
+  width: 100%;
+}
+#highlighted-field{
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: $grey;
+  width: calc(100% - 30px);
+  height: 100%;
+  z-index: -1;
+  font-family: $robotoMono;
+  font-size: 0.8em;
+}
+#edit-field{
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: calc(100% - 30px);
+  min-height: 100%;
+  opacity: 1;
+  z-index: 10;
+  box-sizing: border-box;
+  font-family: $robotoMono; 
+  font-size: 0.8em;
+  outline: none;
+}
+#wrapper{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+}

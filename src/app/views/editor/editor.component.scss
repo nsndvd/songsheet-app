@@ -1,6 +1,8 @@
 @import '../../../assets/fonts.scss';
+@import '../../../assets/colors.scss';
 
-.test{
-  font-family: $robotoMono;
-  border: white;
+.editField{
+  display: inline-block;
+  height: calc(100% - 100px);
+  width: 50%;
 }
