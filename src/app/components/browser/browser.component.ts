@@ -62,8 +62,10 @@ export class BrowserComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result)
+      if(result){
         this.dataService.upsert(this.type, result);
+        this.updateElems();
+      }
     });
   }
 
