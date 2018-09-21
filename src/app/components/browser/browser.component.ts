@@ -56,14 +56,19 @@ export class BrowserComponent implements OnInit {
   }
 
   showAddForm(data){
+    if (!data){
+      data = this.type === DATABASES.songs ? new Song() : new Songgroup();
+    }
     const dialogRef = this.dialog.open(SongEventFormComponent, {
       width: '500px',
       data: {object: data}
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result)
+      if(result){
         this.dataService.upsert(this.type, result);
+        this.updateElems();
+      }
     });
   }
 
