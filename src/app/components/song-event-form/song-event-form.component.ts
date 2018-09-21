@@ -110,12 +110,12 @@ export class SongEventFormComponent implements OnInit {
       // init song/event if editMeta is called
       switch(this.type){
         case DATABASES.songs:
-          this.song = this.data.object;
+          this.song = new Song(this.data.object);
           this.songBooksStr = this.song.books ? this.song.books.join('; ') : '';
           break;
           
         case DATABASES.events:
-          this.songgroup = this.data.object;
+          this.songgroup = new Songgroup(this.data.object);
           for (let song of this.songgroup.songs){
             this.addSongField(
               this.songs.find((val, id, obj) => {
