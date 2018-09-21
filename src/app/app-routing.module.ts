@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import {BrowserComponent} from './components/browser/browser.component';
-import {EditorComponent} from './components/editor/editor.component';
-import {SettingsComponent} from './components/settings/settings.component';
-import { ColorComponent } from './components/color/color.component';
-import { IconsComponent } from './components/icons/icons.component';
+import {BrowserComponent} from './views/browser/browser.component';
+import {EditorComponent} from './views/editor/editor.component';
+import {SettingsComponent} from './views/settings/settings.component';
+import { ColorComponent } from './views/color/color.component';
+import { IconsComponent } from './views/icons/icons.component';
 
 const routes: Routes = [
   {

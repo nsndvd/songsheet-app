@@ -9,15 +9,16 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
-import { BrowserComponent } from './components/browser/browser.component';
-import { SettingsComponent } from './components/settings/settings.component';
-import { EditorComponent } from './components/editor/editor.component';
 import { SongComponent } from './components/song/song.component';
 import { EventComponent } from './components/event/event.component';
 import { SongEventFormComponent } from './components/song-event-form/song-event-form.component';
-import { ColorComponent } from './components/color/color.component';
-import { IconsComponent } from './components/icons/icons.component';
 import { PreviewComponent } from './components/preview/preview.component';
+
+import { BrowserComponent } from './views/browser/browser.component';
+import { SettingsComponent } from './views/settings/settings.component';
+import { EditorComponent } from './views/editor/editor.component';
+import { IconsComponent } from './views/icons/icons.component';
+import { ColorComponent } from './views/color/color.component';
 
 import { DataService } from './services/data.service';
 import { ParserService } from './services/parser.service';
