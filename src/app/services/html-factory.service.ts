@@ -105,8 +105,9 @@ export class HtmlFactoryService {
 
     for(let id = 0; id < arr.length; id++) {
       const char = arr[id];
-      if (ignoreNext > 0 && !keepChars){
+      if (ignoreNext > 0){
         ignoreNext--;
+        doNotAdd = false;
         continue;
       }
       
@@ -133,6 +134,11 @@ export class HtmlFactoryService {
             italic = !italic;
         }
         ignoreNext = countStars - 1;
+        if(keepChars){
+          for( let i = 0; i < ignoreNext; i++){
+            html += arr[id+i];
+          }
+        }
 
       } else if(id+2 < arr.length && /<(r|g|b)>/gi.test(char+arr[id+1]+arr[id+2])){
         update = true;
@@ -143,7 +149,7 @@ export class HtmlFactoryService {
         }else{
           colorStack.push(arr[id+1]);
         }
-        ignoreNext = 2;
+        ignoreNext = !keepChars ? 2 : 0;
       }
 
       //update
