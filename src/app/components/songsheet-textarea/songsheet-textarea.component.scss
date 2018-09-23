@@ -17,24 +17,26 @@
   text-align: right;
   width: 30px;
   height: 11px;
-  padding: 2px;
   padding-right: 5px;
-  margin-right: 2px;
+  margin-right: 5px;
   font-size: 0.9em;
   content: attr(data-content);
   background: $dark-grey;
   color: $white;
   font-family: $robotoMono;
   display: inline-block;
-  margin-top: -10px;
+  vertical-align: top;
 }
 .line:last-child::before{
   padding-bottom: 10px;
 }
 .line ::ng-deep{
+
   pre{
-    display: inline-block;
+    display: inline;
     margin: 0;
+    white-space: pre-wrap;
+    word-break: break-all;
   }
 
   .red{
@@ -83,12 +85,11 @@
   font-family: $robotoMono; 
   font-size: 0.8em;
   outline: none;
-  overflow-y: hidden;
   overflow-x: scroll;
   padding: 2px;
   padding-left: 40px;
   letter-spacing: 0.1px;
-  word-break: keep-all;
+  resize: none;
 }
 #wrapper{
   position: relative;

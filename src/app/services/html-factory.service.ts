@@ -101,6 +101,7 @@ export class HtmlFactoryService {
     let firstStarted = false;
     let html = '';
     const arr = str.split('');
+    let doNotAdd = false;
 
     for(let id = 0; id < arr.length; id++) {
       const char = arr[id];
@@ -137,6 +138,8 @@ export class HtmlFactoryService {
         update = true;
         if (colorStack.includes(arr[id+1])){
           colorStack = this._removeColor(arr[id+1], colorStack);
+          html += this._escapeHTML(char)+this._escapeHTML(arr[id+1])+this._escapeHTML(arr[id+2]);
+          doNotAdd = true;
         }else{
           colorStack.push(arr[id+1]);
         }
@@ -145,12 +148,16 @@ export class HtmlFactoryService {
 
       //update
       if(update){
-        const closingTag = firstStarted ? '</pre>' : '';
-        const letter = keepChars ? this._escapeHTML(char) : '';
+        const closingTag = firstStarted || keepChars ? '</pre>' : '';
+        const letter = keepChars && !doNotAdd ? this._escapeHTML(char) : '';
         html += closingTag+'<pre class="'+this._getMarkdownClasses(bold, italic, colorStack)+'">'+letter;
         firstStarted = true;
-      }else{
+      }else if(!doNotAdd){
         html += this._escapeHTML(char);
+      }
+
+      if(/<(r|g|b)>/gi.test(arr[id-2]+arr[id-1]+char)){
+        doNotAdd = false;
       }
     }
     return html;
