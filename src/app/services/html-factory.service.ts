@@ -11,12 +11,14 @@ export class HtmlFactoryService {
 
   constructor() { }
 
-  public highlightText(text:string):string{
-    let html:string = '<pre>';
+  public highlightText(text:string): string[]{
+    let lines: string[] = [];
     for(let line of text.split('\n')){
-      html += this._markdown(line, true)+'</pre><br><pre>';
+      let html:string = '<pre>';
+      html += this._markdown(line, true)+'</pre>';
+      lines.push(html);
     }
-    return html+'</pre>'+this._thinStyles();
+    return lines;
   }
 
   public song2html(song:Song): string {

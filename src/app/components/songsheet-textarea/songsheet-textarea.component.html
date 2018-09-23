@@ -1,8 +1,8 @@
 <div id="wrapper">
-  <div id="line-numbers-wrapper">
-    <div class="line-number" *ngFor="let l of linenumbers">{{ l }}</div>
+  <div id="highlighted-field">
+    <div class="linenumbers"></div>
+    <div class="line" *ngFor="let l of htmlLines; let i = index;" attr.data-content="{{i + 1}}" [innerHTML]="l | safe: 'html'"></div>
   </div>
-  <div id="highlighted-field" [innerHTML]="highlightedText | safe: 'html'"></div>
   <form [formGroup]="inputGroup">
     <textarea id="edit-field" autosize formControlName="inputControl"></textarea>
   </form>

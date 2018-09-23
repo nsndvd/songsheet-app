@@ -1,35 +1,65 @@
 @import '../../../assets/fonts.scss';
 @import '../../../assets/colors.scss';
 
-#line-numbers-wrapper{
+.linenumbers{
+  background: $dark-grey;
   position: absolute;
   top: 0;
   left: 0;
-  width: 30px;
+  width: 38px;
   min-height: 100%;
-  background: $dark-grey;
-  color: $white;
-  padding-right: 10px;
-  float: right;
-  font-family: $robotoMono;
+  z-index: 0;
 }
-.line-number{
+
+.line::before{
+  position: relative;
+  z-index: 5;
   text-align: right;
-  width: 100%;
+  width: 30px;
   height: 11px;
   padding: 2px;
+  padding-right: 5px;
+  margin-right: 2px;
   font-size: 0.9em;
+  content: attr(data-content);
+  background: $dark-grey;
+  color: $white;
+  font-family: $robotoMono;
+  display: inline-block;
+  margin-top: -10px;
 }
-.line-number:last-child{
-  padding-bottom: 6px;
+.line:last-child::before{
+  padding-bottom: 10px;
+}
+.line ::ng-deep{
+  pre{
+    display: inline-block;
+    margin: 0;
+  }
+
+  .red{
+    color: red;
+  }
+  .green{
+    color: green;
+  }
+  .blue{
+    color: blue;
+  }
+  .bold{
+    font-weight: bold;
+  }
+  .italic{
+    font-style: italic;
+  }
 }
 #highlighted-field{
   position: absolute;
   top: 0;
   right: 0;
   background: $grey;
-  width: calc(100% - 40px);
-  height: 100%;
+  width: 100%;
+  min-height: 100%;
   z-index: -1;
   font-family: $robotoMono;
   font-size: 1em;
@@ -41,7 +71,7 @@
   position: absolute;
   top: 0;
   right: 0;
-  width: calc(100% - 40px);
+  width: 100%;
   min-height: 100%;
   opacity: 1;
   background: transparent;
@@ -56,6 +86,7 @@
   overflow-y: hidden;
   overflow-x: scroll;
   padding: 2px;
+  padding-left: 40px;
   letter-spacing: 0.1px;
   word-break: keep-all;
 }

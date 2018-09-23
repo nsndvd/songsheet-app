@@ -10,8 +10,7 @@ import { HtmlFactoryService } from '../../services/html-factory.service';
 export class SongsheetTextareaComponent implements OnInit {
 
   inputGroup: FormGroup;
-  highlightedText:string = '';
-  linenumbers: number[] = [1];
+  htmlLines:string[] = [];
 
   constructor(private fb: FormBuilder, private htmlFactory: HtmlFactoryService) {
     this.inputGroup = this.fb.group({
@@ -23,22 +22,11 @@ export class SongsheetTextareaComponent implements OnInit {
     this.inputGroup.get('inputControl').valueChanges.subscribe((v) => {
       this.update(v);
     });
+    this.update('');
   }
 
   update(inputText:string){
-    this.highlightedText = this.htmlFactory.highlightText(inputText);
-    this.updateNewLines();
-  }
-
-  updateNewLines(){
-    this.linenumbers = [1];
-    const str = this.inputGroup.get('inputControl').value;
-    const m = str.match(/\n/g);
-    if(m){
-      for(let match of m){
-        this.linenumbers.push(this.linenumbers.length+1);
-      }
-    }
+    this.htmlLines = this.htmlFactory.highlightText(inputText);
   }
 
 }
