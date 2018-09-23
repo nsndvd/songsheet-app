@@ -181,7 +181,6 @@ export class HtmlFactoryService {
         '=': '&#x3D;',
         '|': '&#124;'
     };
-    console.log(char, entityMap[char]);
     return entityMap[char] ? entityMap[char] : char;
   }
 
