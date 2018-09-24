@@ -94,27 +94,23 @@ export class HtmlFactoryService {
   private _markdown(str:string, editorParsing:boolean = false): string {
     if (!str)
       return '';
-    let bold = false;
-    let italic = false;
-    let orange = false;
+    let bold, italic, orange, firstStarted, doNotAdd = false;
     let colorStack = [];
     let ignoreNext = 0;
-    let firstStarted = false;
     let html = '';
     const arr = str.split('');
-    let doNotAdd = false;
 
+    // iterate over chars and add styling
     for(let id = 0; id < arr.length; id++) {
-      let grey = false;
+      let grey, update = false;
       const char = arr[id];
+
       if (ignoreNext > 0){
         ignoreNext--;
         doNotAdd = false;
         continue;
       }
       
-      let update = false;
-
       if(char === '*'){
         update = true;
         let countStars;
@@ -124,17 +120,9 @@ export class HtmlFactoryService {
             break;
         }
 
-        switch (countStars){
-          case 1:
-            italic = !italic;
-            break;
-          case 2:
-            bold = !bold;
-            break;
-          case 3:
-            bold = !bold;
-            italic = !italic;
-        }
+        italic = countStars % 2 === 1 ? !italic : italic;
+        bold = countStars > 1 ? !bold : bold;
+
         ignoreNext = countStars - 1;
         if(editorParsing){
           for( let i = 0; i < ignoreNext; i++){
