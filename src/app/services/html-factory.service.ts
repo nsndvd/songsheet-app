@@ -14,7 +14,7 @@ export class HtmlFactoryService {
   public highlightText(text:string): string[]{
     let lines: string[] = [];
     for(let line of text.split('\n')){
-      let html:string = '<pre>';
+      let html:string = '<pre class="line-wrapper">';
       html += this._markdown(line, true)+'</pre>';
       lines.push(html);
     }
@@ -154,7 +154,7 @@ export class HtmlFactoryService {
 
       //update
       if(update){
-        const closingTag = firstStarted || keepChars ? '</pre>' : '';
+        const closingTag = firstStarted ? '</pre>' : '';
         const letter = keepChars && !doNotAdd ? this._escapeHTML(char) : '';
         html += closingTag+'<pre class="'+this._getMarkdownClasses(bold, italic, colorStack)+'">'+letter;
         firstStarted = true;
