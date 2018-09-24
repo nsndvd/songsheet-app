@@ -291,28 +291,4 @@ export class HtmlFactoryService {
       </style>`;
   }
 
-  private _thinStyles(){
-    return `<style>
-    pre, pre pre{
-      display: inline-block;
-      margin: 0;
-    }
-    .red{
-      color: red;
-    }
-    .blue{
-      color: blue;
-    }
-    .green{
-      color: green;
-    }
-    .bold{
-      font-weight: bold;
-    }
-    .italic{
-      font-style: italic;
-    }
-    </style>`;
-  }
-
 }
