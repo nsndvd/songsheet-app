@@ -91,11 +91,12 @@ export class HtmlFactoryService {
     return html;
   }
 
-  private _markdown(str:string, keepChars:boolean = false): string {
+  private _markdown(str:string, editorParsing:boolean = false): string {
     if (!str)
       return '';
     let bold = false;
     let italic = false;
+    let orange = false;
     let colorStack = [];
     let ignoreNext = 0;
     let firstStarted = false;
@@ -104,6 +105,7 @@ export class HtmlFactoryService {
     let doNotAdd = false;
 
     for(let id = 0; id < arr.length; id++) {
+      let grey = false;
       const char = arr[id];
       if (ignoreNext > 0){
         ignoreNext--;
@@ -134,7 +136,7 @@ export class HtmlFactoryService {
             italic = !italic;
         }
         ignoreNext = countStars - 1;
-        if(keepChars){
+        if(editorParsing){
           for( let i = 0; i < ignoreNext; i++){
             html += arr[id+i];
           }
@@ -149,14 +151,24 @@ export class HtmlFactoryService {
         }else{
           colorStack.push(arr[id+1]);
         }
-        ignoreNext = !keepChars ? 2 : 0;
+        ignoreNext = !editorParsing ? 2 : 0;
+      } else if(editorParsing && char === '['){
+        update = true;
+        grey = true;
+        orange = true;
+      } else if((arr[id-1] === '[' && char !== ']') || arr[id-1] === ']'){
+        update = true;
+      } else if(editorParsing && char === ']'){
+        update = true;
+        orange = false;
+        grey = true;
       }
 
       //update
       if(update){
         const closingTag = firstStarted ? '</pre>' : '';
-        const letter = keepChars && !doNotAdd ? this._escapeHTML(char) : '';
-        html += closingTag+'<pre class="'+this._getMarkdownClasses(bold, italic, colorStack)+'">'+letter;
+        const letter = editorParsing && !doNotAdd ? this._escapeHTML(char) : '';
+        html += closingTag+'<pre class="'+this._getMarkdownClasses(bold, italic, colorStack, grey, orange)+'">'+letter;
         firstStarted = true;
       }else if(!doNotAdd){
         html += this._escapeHTML(char);
@@ -190,16 +202,18 @@ export class HtmlFactoryService {
     });
   }
 
-  private _getMarkdownClasses(bold:boolean, italic:boolean, colorStack: string[]): string{
-    const b = bold ? 'bold ':'';
-    const i = italic ? 'italic ':'';
+  private _getMarkdownClasses(bold:boolean, italic:boolean, colorStack: string[], grey:boolean = false, orange:boolean = false): string{
+    const b = bold ? 'bold':'';
+    const i = italic ? 'italic':'';
     const colors = {
       'r': 'red',
       'g': 'green',
       'b': 'blue'
     }
-    const color = colorStack.length > 0 ? colors[colorStack[colorStack.length - 1]] : '';
-    return b+i+color;
+    const color = colorStack.length > 0 && !grey ? colors[colorStack[colorStack.length - 1]] : '';
+    const g = grey ? 'grey' : '';
+    const o = orange && !grey ? 'orange' : '';
+    return [b, i, color, g, o].join(' ');
   }
 
   private _style(): string{
