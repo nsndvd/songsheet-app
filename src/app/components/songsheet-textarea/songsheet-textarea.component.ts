@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, HostListener, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { HtmlFactoryService } from '../../services/html-factory.service';
 import { ParserService } from '../../services/parser.service';
@@ -17,8 +17,10 @@ const enum KEYS{
 })
 export class SongsheetTextareaComponent implements OnInit {
 
+  @Input() input: Song;
   @Output() value: EventEmitter<Song> = new EventEmitter<Song>();
 
+  song:Song = new Song();
   inputGroup: FormGroup;
   htmlLines:string[] = [];
 
@@ -35,9 +37,15 @@ export class SongsheetTextareaComponent implements OnInit {
   ngOnInit() {
     this.inputGroup.get('inputControl').valueChanges.subscribe((v) => {
       this._update(v);
-      this.value.emit(this.parser.str2Obj(v));
+      this.song = this.parser.str2Obj(v);
+      this.value.emit(this.song);
     });
-    this._update('');
+  }
+  ngOnChanges(){
+    if(this.input){
+      this.song = this.input;
+    }
+    this.inputGroup.get('inputControl').setValue(this.parser.obj2Str(this.song));
   }
 
   private _update(inputText:string){
