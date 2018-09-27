@@ -11,11 +11,17 @@ export class HtmlFactoryService {
 
   constructor() { }
 
+  public highlightText(text:string): string[]{
+    return text
+        .split('\n')
+        .map(line =>`<pre class="line-wrapper">${ this._markdown(line, true) }</pre>`);
+   }
+
   public song2html(song:Song): string {
-    const title = song.title ? song.title : '';
-    const artist = song.artist ? song.artist : '';
-    const bpm = song.bpm ? song.bpm : '';
-    const books = song.books ? song.books : [];
+    const title = song.title || '';
+    const artist = song.artist || '';
+    const bpm = song.bpm || '';
+    const books = song.books || [];
 
     let html = '<div class="page">';
 
@@ -81,26 +87,25 @@ export class HtmlFactoryService {
     return html;
   }
 
-  private _markdown(str:string): string {
+  private _markdown(str:string, editorParsing:boolean = false): string {
     if (!str)
       return '';
-    let bold = false;
-    let italic = false;
+    let bold, italic, orange, firstStarted, doNotAdd = false;
     let colorStack = [];
     let ignoreNext = 0;
-    let firstStarted = false;
     let html = '';
     const arr = str.split('');
 
-    for(let id = 0; id < arr.length; id++) {
-      const char = arr[id];
+    // iterate over chars and add styling
+    arr.forEach((char, id, arr) => {
+      let grey, update = false;
+
       if (ignoreNext > 0){
         ignoreNext--;
-        continue;
+        doNotAdd = false;
+        return;
       }
       
-      let update = false;
-
       if(char === '*'){
         update = true;
         let countStars;
@@ -110,40 +115,52 @@ export class HtmlFactoryService {
             break;
         }
 
-        switch (countStars){
-          case 1:
-            italic = !italic;
-            break;
-          case 2:
-            bold = !bold;
-            break;
-          case 3:
-            bold = !bold;
-            italic = !italic;
-        }
+        italic = countStars % 2 === 1 ? !italic : italic;
+        bold = countStars > 1 ? !bold : bold;
+
         ignoreNext = countStars - 1;
+        if(editorParsing){
+          for( let i = 0; i < ignoreNext; i++){
+            html += arr[id+i];
+          }
+        }
 
       } else if(id+2 < arr.length && /<(r|g|b)>/gi.test(char+arr[id+1]+arr[id+2])){
         update = true;
         if (colorStack.includes(arr[id+1])){
           colorStack = this._removeColor(arr[id+1], colorStack);
+          html += this._escapeHTML(char)+this._escapeHTML(arr[id+1])+this._escapeHTML(arr[id+2]);
+          doNotAdd = true;
         }else{
           colorStack.push(arr[id+1]);
         }
-        ignoreNext = 2;
+        ignoreNext = !editorParsing ? 2 : 0;
+      } else if(editorParsing && char === '['){
+        update = true;
+        grey = true;
+        orange = true;
+      } else if((arr[id-1] === '[' && char !== ']') || arr[id-1] === ']'){
+        update = true;
+      } else if(editorParsing && char === ']'){
+        update = true;
+        orange = false;
+        grey = true;
       }
 
       //update
       if(update){
-        let closingTag = '';
-        if(firstStarted)
-          closingTag = '</pre>';
-        html += closingTag+'<pre class="'+this._getMarkdownClasses(bold, italic, colorStack)+'">';
+        const closingTag = firstStarted ? '</pre>' : '';
+        const letter = editorParsing && !doNotAdd ? this._escapeHTML(char) : '';
+        html += closingTag+'<pre class="'+this._getMarkdownClasses(bold, italic, colorStack, grey, orange)+'">'+letter;
         firstStarted = true;
-      }else{
+      }else if(!doNotAdd){
         html += this._escapeHTML(char);
       }
-    }
+
+      if(/<(r|g|b)>/gi.test(arr[id-2]+arr[id-1]+char)){
+        doNotAdd = false;
+      }
+    })
     return html;
   }
 
@@ -168,16 +185,18 @@ export class HtmlFactoryService {
     });
   }
 
-  private _getMarkdownClasses(bold:boolean, italic:boolean, colorStack: string[]): string{
-    const b = bold ? 'bold ':'';
-    const i = italic ? 'italic ':'';
+  private _getMarkdownClasses(bold:boolean, italic:boolean, colorStack: string[], grey:boolean = false, orange:boolean = false): string{
+    const b = bold ? 'bold':'';
+    const i = italic ? 'italic':'';
     const colors = {
       'r': 'red',
       'g': 'green',
       'b': 'blue'
     }
-    const color = colorStack.length > 0 ? colors[colorStack[colorStack.length - 1]] : '';
-    return b+i+color;
+    const color = colorStack.length > 0 && !grey ? colors[colorStack[colorStack.length - 1]] : '';
+    const g = grey ? 'grey' : '';
+    const o = orange && !grey ? 'orange' : '';
+    return [b, i, color, g, o].join(' ');
   }
 
   private _style(): string{

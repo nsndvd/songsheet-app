@@ -6,7 +6,7 @@ import { DATABASES } from '../../models/databases';
 import { Songgroup } from '../../models/songgroup';
 import { DataService } from '../../services/data.service';
 import { MatDialog } from '@angular/material';
-import { SongEventFormComponent } from '../song-event-form/song-event-form.component';
+import { SongEventFormComponent } from '../../components/song-event-form/song-event-form.component';
 
 @Component({
   selector: 'app-browser',
